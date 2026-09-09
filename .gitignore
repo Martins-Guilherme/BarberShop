@@ -41,8 +41,12 @@ yarn-error.log*
 next-env.d.ts
 dist/
 
+skills-lock.json
+
 .gitattributes
 .agents
 .claude
 .cursor
 .devin
+.windsurf
+/src/generated/prisma
