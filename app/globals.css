@@ -63,7 +63,7 @@
 
 @layer base {
   * {
-    @apply border antialiased;
+    @apply border-border antialiased;
   }
   html {
     @apply h-full;
