@@ -2,15 +2,20 @@ import Image from 'next/image'
 
 import Header from './_components/header'
 
+import { SearchIcon } from 'lucide-react'
+
 import { Button } from './_components/ui/button'
 import { Input } from './_components/ui/input'
-
-import { SearchIcon } from 'lucide-react'
 import { Card, CardContent } from './_components/ui/card'
 import { Badge } from './_components/ui/badge'
 import { Avatar, AvatarImage } from './_components/ui/avatar'
 
-export default function Home() {
+import { db } from './_lib/prisma'
+import BarbershopItem from './_components/barbershop-item'
+
+export default async function Home() {
+  const barbershops = await db.barbershop.findMany({})
+
   return (
     <div>
       {/*  header  */}
@@ -36,11 +41,13 @@ export default function Home() {
           />
         </div>
         {/* Agendamento */}
-        <h2 className='text-xl font-bold uppercase text-gray-700'>Agendamentos</h2>
-        <Card className="mt-6 p-0">
+        <h2 className="mt-6 mb-3 text-xl font-bold text-gray-400 uppercase">
+          Agendamentos
+        </h2>
+        <Card className="p-0">
           <CardContent className="flex justify-between">
             {/* Esquerdo */}
-            <div className="flex flex-col gap-2 py-5">
+            <div className="flex flex-col gap-2 py-5 pl-5">
               <Badge className="w-fit">Confirmado</Badge>
               <h3 className="font-semibold">Corte de cabelo</h3>
 
@@ -59,6 +66,16 @@ export default function Home() {
             </div>
           </CardContent>
         </Card>
+
+        {/* Recomendadas */}
+        <h2 className="mt-6 mb-3 text-xl font-bold text-gray-400 uppercase">
+          Recomendados
+        </h2>
+        <div className="flex gap-4 overflow-auto [&::-webkit-scrollbar]:hidden">
+          {barbershops.map((barbershop) => (
+            <BarbershopItem key={barbershop.id} barbershop={barbershop} />
+          ))}
+        </div>
       </div>
     </div>
   )
