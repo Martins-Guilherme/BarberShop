@@ -1,10 +1,9 @@
 import { defineConfig, globalIgnores } from 'eslint/config'
-import nextVitals from 'eslint-config-next/core-web-vitals'
 import nextTs from 'eslint-config-next/typescript'
+import nextPlugin from '@next/eslint-plugin-next'
 
 const eslintConfig = defineConfig(
   [
-    ...nextVitals,
     ...nextTs,
     // Override default ignores of eslint-config-next.
     globalIgnores([
@@ -17,8 +16,11 @@ const eslintConfig = defineConfig(
   ],
   {
     files: ['**/*.ts', '**/*.tsx'],
+    plugins: {
+      '@next/next': nextPlugin,
+    },
     rules: {
-      'no-unused-vars': 'error'
+      ...nextPlugin.configs.recommended.rules,
     },
   }
 )
