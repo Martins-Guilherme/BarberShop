@@ -1,6 +1,6 @@
 'use client'
 
-import { Barbershop } from '@prisma/client'
+import { Barbershop } from '@/app/_generated/prisma/client'
 import { Card, CardContent } from './ui/card'
 import Image from 'next/image'
 import { Button } from './ui/button'

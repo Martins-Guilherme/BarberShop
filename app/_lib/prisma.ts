@@ -1,18 +1,20 @@
-import { PrismaClient } from '@prisma/client'
+import { PrismaPg } from '@prisma/adapter-pg'
+import { PrismaClient } from '@/app/_generated/prisma/client'
 
 const globalForPrisma = globalThis as unknown as {
   cachedPrisma?: PrismaClient
 }
 
-let prisma: PrismaClient
+const prisma =
+  globalForPrisma.cachedPrisma ??
+  new PrismaClient({
+    adapter: new PrismaPg({
+      connectionString: process.env.DATABASE_URL,
+    }),
+  })
 
-if (process.env.NODE_ENV === 'production') {
-  prisma = new PrismaClient()
-} else {
-  if (!globalForPrisma.cachedPrisma) {
-    globalForPrisma.cachedPrisma = new PrismaClient()
-  }
-  prisma = globalForPrisma.cachedPrisma
+if (process.env.NODE_ENV !== 'production') {
+  globalForPrisma.cachedPrisma = prisma
 }
 
 export const db = prisma
