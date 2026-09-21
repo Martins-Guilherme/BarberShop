@@ -4,9 +4,9 @@ const Footer = () => {
   return (
     <footer>
       <Card>
-        <CardContent className="px-5 py-6">
+        <CardContent className="px-5 py-3">
           <p className="text-sm text-gray-400">
-            © 2023 Copyright <span className="font-bold">FSW Barber</span>
+            © 2026 Copyright <span className="font-bold">Barber Shop</span>
           </p>
         </CardContent>
       </Card>

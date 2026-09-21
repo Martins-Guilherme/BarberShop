@@ -8,8 +8,8 @@ import AuthProvider from './_providers/auth'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'Barbearia do Manoel',
-  description: 'Barbearia do Manoel - Serviços de Corte e Aparência',
+  title: 'Barbearia',
+  description: 'Barbearia - Serviços de Corte e Aparência',
 }
 
 export default function RootLayout({
@@ -21,10 +21,12 @@ export default function RootLayout({
     <html lang="pt-br" className="dark">
       <body className={inter.className}>
         <AuthProvider>
-          {children}
-          <Toaster />
-          <Footer />
+          <div className="flex h-full flex-col">
+            <div className="flex-1">{children}</div>
+            <Footer />
+          </div>
         </AuthProvider>
+        <Toaster />
       </body>
     </html>
   )
