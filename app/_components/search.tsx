@@ -11,21 +11,23 @@ import * as z from 'zod'
 import { Field, FieldError, FieldGroup } from './ui/field'
 
 const formSchema = z.object({
-  search: z.string().trim().min(1, 'A pesquisa deve conter pelo menos um caractere.'),
+  title: z.string().trim().min(1, {
+    message: 'A pesquisa deve conter pelo menos um caractere.',
+  }),
 })
 
 const Search = () => {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      search: '',
+      title: '',
     },
   })
 
   const router = useRouter()
 
   const handleSubmit = (data: z.infer<typeof formSchema>) => {
-    router.push(`/barbershops?search=${data.search}`)
+    router.push(`/barbershops?title=${data.title}`)
   }
 
   return (
@@ -36,7 +38,7 @@ const Search = () => {
     >
       <FieldGroup>
         <Controller
-          name="search"
+          name="title"
           control={form.control}
           render={({ field, fieldState }) => (
             <Field data-invalid={fieldState.invalid}>
