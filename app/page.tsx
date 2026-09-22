@@ -23,7 +23,7 @@ export default async function Home() {
       <Header />
       <div className="p-5">
         {/* Apressentação */}
-        <h2 className="text-xl font-bold">Olá, Guilherme</h2>
+        <h2 className="text-xl font-bold">Olá!</h2>
         <p>Segunda-feira, 12 de setembro de 2026.</p>
         {/* Busca */}
         <div className="mt-6">
