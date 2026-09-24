@@ -19,7 +19,6 @@ import { ptBR } from 'date-fns/locale'
 import { format, set } from 'date-fns'
 
 import { useState } from 'react'
-// import { Barbershop } from '../_generated/prisma/browser'
 import { Barbershop } from '@/app/_generated/prisma/client'
 import { createBooking } from '../_actions/create-booking'
 import { useSession } from 'next-auth/react'
@@ -125,7 +124,7 @@ const ServiceItem = ({ service, barbershop }: ServiceItemProps) => {
                 <SheetHeader>
                   <SheetTitle>Fazer reserva</SheetTitle>
                 </SheetHeader>
-                <div className="mx-auto w-fit border-b border-solid px-0 py-5">
+                <div className="mx-auto w-fit border-b border-solid px-0">
                   <Calendar
                     mode="single"
                     locale={ptBR}
@@ -151,9 +150,9 @@ const ServiceItem = ({ service, barbershop }: ServiceItemProps) => {
                 )}
 
                 {selectedTime && selectedDay && (
-                  <div className="p-5">
+                  <div className="p-3">
                     <Card>
-                      <CardContent className="space-y-3 p-3">
+                      <CardContent className="space-y-2 p-3">
                         <div className="flex items-center justify-between">
                           <h2 className="text-sm">{service.name}</h2>
                           <p className="text-sm">
