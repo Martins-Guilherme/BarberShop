@@ -170,6 +170,7 @@ const ServiceItem = ({ service, barbershop }: ServiceItemProps) => {
                 </SheetHeader>
                 <div className="mx-auto w-fit border-b border-solid px-0">
                   <Calendar
+                    disabled={{ before: new Date() }}
                     mode="single"
                     locale={ptBR}
                     selected={selectedDay}
