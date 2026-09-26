@@ -7,20 +7,13 @@ import { CalendarIcon, HomeIcon, LogInIcon, LogOutIcon } from 'lucide-react'
 import { SheetClose, SheetContent, SheetHeader, SheetTitle } from './ui/sheet'
 import { Button } from './ui/button'
 import Image from 'next/image'
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from './ui/dialog'
-import { signIn, signOut, useSession } from 'next-auth/react'
+import { Dialog, DialogContent, DialogTrigger } from './ui/dialog'
+import { signOut, useSession } from 'next-auth/react'
 import { Avatar, AvatarImage } from './ui/avatar'
+import SigInDialog from './signin-dialog'
 
 const SideBarSheet = () => {
   const { data } = useSession()
-  const handleLoginWithGoogleClick = () => signIn('google')
   const handleLogoutClick = () => signOut()
   return (
     <SheetContent className="overflow-y-auto">
@@ -51,27 +44,7 @@ const SideBarSheet = () => {
                 }
               ></DialogTrigger>
               <DialogContent className="w-[90%]">
-                <DialogHeader className="text-center">
-                  <DialogTitle className="pb-2 text-base font-bold">
-                    Faça login na plataforma
-                  </DialogTitle>
-                  <DialogDescription className="text-sm">
-                    Conecte-se usando sua conta do Google.
-                  </DialogDescription>
-                </DialogHeader>
-                <Button
-                  className="gap-2 rounded-[10px] p-4 text-sm font-bold"
-                  variant="outline"
-                  onClick={handleLoginWithGoogleClick}
-                >
-                  <Image
-                    width={16}
-                    height={16}
-                    alt="fazer login com o google"
-                    src="./google.svg"
-                  />
-                  <p>Google</p>
-                </Button>
+                <SigInDialog />
               </DialogContent>
             </Dialog>
           </>
@@ -122,16 +95,18 @@ const SideBarSheet = () => {
           ></SheetClose>
         ))}
       </div>
-      <div className="flex flex-col gap-2">
-        <Button
-          variant="ghost"
-          className="justify-start gap-2"
-          onClick={handleLogoutClick}
-        >
-          <LogOutIcon size={18} />
-          Sair da conta
-        </Button>
-      </div>
+      {data?.user && (
+        <div className="flex flex-col gap-2">
+          <Button
+            variant="ghost"
+            className="justify-start gap-2"
+            onClick={handleLogoutClick}
+          >
+            <LogOutIcon size={18} />
+            Sair da conta
+          </Button>
+        </div>
+      )}
     </SheetContent>
   )
 }
