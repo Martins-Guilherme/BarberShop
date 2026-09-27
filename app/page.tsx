@@ -9,14 +9,40 @@ import { quickSearchOptinons } from './_constants/search'
 import BookingItem from './_components/booking-item'
 import Search from './_components/search'
 import Link from 'next/link'
+import { getServerSession } from 'next-auth'
+import { authOptions } from './_lib/auth'
 
 export default async function Home() {
+  const session = await getServerSession(authOptions)
+
   const barbershops = await db.barbershop.findMany({})
   const popularBarbeshop = await db.barbershop.findMany({
     orderBy: {
       name: 'desc',
     },
   })
+
+  const confirmedBookings = session?.user
+    ? await db.booking.findMany({
+        where: {
+          userId: (session.user as any).id,
+          date: {
+            gte: new Date(),
+          },
+        },
+        include: {
+          service: {
+            include: {
+              barbershop: true,
+            },
+          },
+        },
+        orderBy: {
+          date: 'asc',
+        },
+      })
+    : []
+
   return (
     <div>
       {/*  header  */}
@@ -59,7 +85,14 @@ export default async function Home() {
           />
         </div>
         {/* Agendamento */}
-        <BookingItem />
+        <h2 className="mt-6 mb-3 text-xl font-bold text-gray-400 uppercase">
+          Agendamentos
+        </h2>
+        <div className="flex gap-3 overflow-x-auto [&::-webkit-scrollbar]:hidden">
+          {confirmedBookings.map((item) => (
+            <BookingItem key={item.id} booking={item} />
+          ))}
+        </div>
 
         {/* Recomendadas */}
         <h2 className="mt-6 mb-3 text-xl font-bold text-gray-400 uppercase">
