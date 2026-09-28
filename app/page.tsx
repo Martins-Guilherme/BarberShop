@@ -85,14 +85,20 @@ export default async function Home() {
           />
         </div>
         {/* Agendamento */}
-        <h2 className="mt-6 mb-3 text-xl font-bold text-gray-400 uppercase">
-          Agendamentos
-        </h2>
-        <div className="flex gap-3 overflow-x-auto [&::-webkit-scrollbar]:hidden">
-          {confirmedBookings.map((item) => (
-            <BookingItem key={item.id} booking={item} />
-          ))}
-        </div>
+        {confirmedBookings.length > 0 ? (
+          <>
+            <h2 className="mt-6 mb-3 text-xl font-bold text-gray-400 uppercase">
+              Agendamentos
+            </h2>
+            <div className="flex gap-3 overflow-x-auto [&::-webkit-scrollbar]:hidden">
+              {confirmedBookings.map((item) => (
+                <BookingItem key={item.id} booking={item} />
+              ))}
+            </div>
+          </>
+        ) : (
+          []
+        )}
 
         {/* Recomendadas */}
         <h2 className="mt-6 mb-3 text-xl font-bold text-gray-400 uppercase">
