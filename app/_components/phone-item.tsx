@@ -13,10 +13,10 @@ const PhoneItem = ({ phone }: PhoneItemProps) => {
   // COPIAR NUMERO
   const handleCopyPhoneClick = (phones: string) => {
     navigator.clipboard.writeText(phones)
-    toast.success("Telefone copiado com sucesso!")
+    toast.success('Telefone copiado com sucesso!')
   }
   return (
-    <div className="space-y-3 p-5">
+    <div>
       <div className="flex justify-between" key={phone}>
         {/* ESQUERDA */}
         <div className="flex items-center gap-2">
