@@ -1,3 +1,5 @@
+'use client'
+
 import { Card, CardContent } from './ui/card'
 import { Avatar, AvatarImage } from './ui/avatar'
 import { Badge } from './ui/badge'
@@ -7,13 +9,29 @@ import { format, isFuture } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
 import {
   Sheet,
+  SheetClose,
   SheetContent,
+  SheetFooter,
   SheetHeader,
   SheetTitle,
   SheetTrigger,
 } from './ui/sheet'
 import Image from 'next/image'
 import PhoneItem from './phone-item'
+import { Button } from './ui/button'
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from './ui/dialog'
+import { toast } from 'sonner'
+import { deleteBooking } from '../_actions/delet-booking'
+import { useState } from 'react'
 
 interface BookingItemProps {
   booking: Prisma.BookingGetPayload<{
@@ -28,15 +46,32 @@ interface BookingItemProps {
 }
 
 const BookingItem = ({ booking }: BookingItemProps) => {
+  const [isSheetOpen, setIsSheetOpen] = useState(false)
+
   const isConfirmed = isFuture(booking.date)
   const {
     service: { barbershop },
   } = booking
 
+  const handleDeleteBooking = async (bookingId: string) => {
+    try {
+      await deleteBooking(bookingId)
+      setIsSheetOpen(false)
+      toast.success('Reserva cancelada com sucesso!')
+    } catch (error) {
+      console.log(error)
+      toast.error('Erro ao cancelar a reserva. Tente novamente mais tarde.')
+    }
+  }
+
+  const handleSheetOpenChange = (isOpen: boolean) => {
+    setIsSheetOpen(isOpen)
+  }
+
   return (
-    <Sheet>
+    <Sheet open={isSheetOpen} onOpenChange={handleSheetOpenChange}>
       <SheetTrigger className="w-full">
-        <Card className="min-w-[90%] shrink-0 p-0">
+        <Card className="w-full p-0">
           <CardContent className="flex justify-between">
             {/* Esquerdo */}
             <div className="flex flex-col gap-2 py-5 pl-2">
@@ -147,6 +182,54 @@ const BookingItem = ({ booking }: BookingItemProps) => {
             ))}
           </div>
         </div>
+
+        <SheetFooter className="mt-6 w-full">
+          <div className="flex w-full flex-col gap-3">
+            <SheetClose
+              render={
+                <Button className="w-full" variant="outline">
+                  Voltar
+                </Button>
+              }
+            ></SheetClose>
+            {isConfirmed && (
+              <Dialog>
+                <DialogTrigger>
+                  <Button className="w-full" variant="destructive">
+                    Cancelar Reserva
+                  </Button>
+                </DialogTrigger>
+                <DialogContent className="w-full">
+                  <DialogHeader>
+                    <DialogTitle>
+                      Você deseja cancelar a sua reserva?
+                    </DialogTitle>
+                    <DialogDescription>
+                      Ao cancelar, você perderá sua reserva e não poderá
+                      recuperá-la.
+                    </DialogDescription>
+                  </DialogHeader>
+                  <DialogFooter className="flex flex-row items-center justify-center gap-3">
+                    <DialogClose className="w-full">
+                      <Button variant="secondary" className="w-full">
+                        Voltar
+                      </Button>
+                    </DialogClose>
+                    <DialogClose className="w-full">
+                      <Button
+                        className="w-full"
+                        variant="destructive"
+                        onClick={() => handleDeleteBooking(booking.id)}
+                      >
+                        confirmar
+                      </Button>
+                    </DialogClose>
+                  </DialogFooter>
+                </DialogContent>
+              </Dialog>
+            )}
+          </div>
+        </SheetFooter>
       </SheetContent>
     </Sheet>
   )
