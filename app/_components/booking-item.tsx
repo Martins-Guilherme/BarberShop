@@ -32,6 +32,7 @@ import {
 import { toast } from 'sonner'
 import { deleteBooking } from '../_actions/delet-booking'
 import { useState } from 'react'
+import BookingSummary from './booking-summary'
 
 interface BookingItemProps {
   booking: Prisma.BookingGetPayload<{
@@ -139,42 +140,13 @@ const BookingItem = ({ booking }: BookingItemProps) => {
             {isConfirmed ? 'Confirmado' : 'Finalizado'}
           </Badge>
 
-          <Card className="mt-3 mb-6">
-            <CardContent className="space-y-2 p-3">
-              <div className="flex items-center justify-between">
-                <h2 className="text-sm">{booking.service.name}</h2>
-                <p className="text-sm">
-                  {Intl.NumberFormat('pt-BR', {
-                    style: 'currency',
-                    currency: 'BRL',
-                  }).format(Number(booking.service.price))}
-                </p>
-              </div>
-
-              <div className="flex items-center justify-between">
-                <h2 className="text-sm text-gray-400">Data</h2>
-                <p className="text-sm">
-                  {format(booking.date, "d 'de' MMMM", {
-                    locale: ptBR,
-                  })}
-                </p>
-              </div>
-
-              <div className="flex items-center justify-between">
-                <h2 className="text-sm text-gray-400">Horário</h2>
-                <p className="text-sm">
-                  {format(booking.date, 'HH:mm', {
-                    locale: ptBR,
-                  })}
-                </p>
-              </div>
-
-              <div className="flex items-center justify-between">
-                <h2 className="text-sm text-gray-400">Barberaria</h2>
-                <p className="text-sm">{barbershop.name}</p>
-              </div>
-            </CardContent>
-          </Card>
+          <div className="mt-3 mb-6">
+            <BookingSummary
+              barbershop={barbershop}
+              service={booking.service}
+              selectedDate={booking.date}
+            />
+          </div>
 
           <div className="space-y-3">
             {barbershop.phones.map((phone, index) => (

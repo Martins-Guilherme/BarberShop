@@ -14,7 +14,7 @@ import {
 import { Calendar } from './ui/calendar'
 
 import { ptBR } from 'date-fns/locale'
-import { format, isPast, isToday, set } from 'date-fns'
+import { isPast, isToday, set } from 'date-fns'
 
 import { useEffect, useMemo, useState } from 'react'
 import { Barbershop } from '@/app/_generated/prisma/client'
@@ -25,6 +25,8 @@ import { getBookings } from '../_actions/get-bookings'
 import { Booking } from '../_generated/prisma/browser'
 import { Dialog, DialogContent } from './ui/dialog'
 import SigInDialog from './signin-dialog'
+import BookingSummary from './booking-summary'
+import { useRouter } from 'next/navigation'
 
 interface ServiceItemProps {
   service: BarbershopService
@@ -85,6 +87,7 @@ const getTimeList = ({ bookings, selectedDay }: GetTimeListProps) => {
 }
 
 const ServiceItem = ({ service, barbershop }: ServiceItemProps) => {
+  const router = useRouter()
   const [selectedDay, setSelectedDay] = useState<Date | undefined>(undefined)
   const [selectedTime, setSelectedTime] = useState<string | undefined>('')
   const [dayBookings, setDayBookings] = useState<Booking[]>([])
@@ -103,21 +106,21 @@ const ServiceItem = ({ service, barbershop }: ServiceItemProps) => {
   }
 
   const handleCreateBooking = async () => {
-    if (!selectedDay || !selectedTime) return
+    if (!selectedDate) return
     try {
-      const hours = Number(selectedTime.split(':')[0])
-      const minute = Number(selectedTime.split(':')[1])
-
-      const newDate = set(selectedDay, {
-        minutes: minute,
-        hours: hours,
-      })
       await createBooking({
         serviceId: service.id,
-        date: newDate,
+        date: selectedDate,
       })
       handleBookingSheetIsOpenChange()
-      toast.success('Reserva criada com sucesso!')
+      toast.success('Reserva criada com sucesso!', {
+        action: {
+          label: 'Ver agendamentos',
+          onClick: () => {
+            router.push('/bookings')
+          },
+        },
+      })
     } catch (err) {
       console.error(err)
       toast.error('Erro ao tentar criar o agendamento!')
@@ -157,6 +160,15 @@ const ServiceItem = ({ service, barbershop }: ServiceItemProps) => {
       selectedDay,
     })
   }, [selectedDay, dayBookings])
+
+  const selectedDate = useMemo(() => {
+    if (!selectedDay || !selectedTime) return
+    console.log('selectedDate: ', selectedDay, 'selectedTime: ', selectedTime)
+    return set(selectedDay, {
+      hours: Number(selectedTime.split(':')[0]),
+      minutes: Number(selectedTime.split(':')[1]),
+    })
+  }, [selectedDay, selectedTime])
 
   return (
     <>
@@ -233,43 +245,15 @@ const ServiceItem = ({ service, barbershop }: ServiceItemProps) => {
                     </div>
                   )}
 
-                  {selectedTime && selectedDay && (
+                  {selectedDate && (
                     <div className="p-3">
-                      <Card>
-                        <CardContent className="space-y-2 p-3">
-                          <div className="flex items-center justify-between">
-                            <h2 className="text-sm">{service.name}</h2>
-                            <p className="text-sm">
-                              {Intl.NumberFormat('pt-BR', {
-                                style: 'currency',
-                                currency: 'BRL',
-                              }).format(Number(service.price))}
-                            </p>
-                          </div>
-
-                          <div className="flex items-center justify-between">
-                            <h2 className="text-sm text-gray-400">Data</h2>
-                            <p className="text-sm">
-                              {format(selectedDay, "d 'de' MMMM", {
-                                locale: ptBR,
-                              })}
-                            </p>
-                          </div>
-
-                          <div className="flex items-center justify-between">
-                            <h2 className="text-sm text-gray-400">Horário</h2>
-                            <p className="text-sm">{selectedTime}</p>
-                          </div>
-
-                          <div className="flex items-center justify-between">
-                            <h2 className="text-sm text-gray-400">
-                              Barberaria
-                            </h2>
-                            <p className="text-sm">{barbershop.name}</p>
-                          </div>
-                        </CardContent>
-                      </Card>
+                      <BookingSummary
+                        barbershop={barbershop}
+                        service={service}
+                        selectedDate={selectedDate}
+                      />
                     </div>
+                    // 47:00
                   )}
 
                   <SheetFooter className="px-5">
