@@ -163,7 +163,6 @@ const ServiceItem = ({ service, barbershop }: ServiceItemProps) => {
 
   const selectedDate = useMemo(() => {
     if (!selectedDay || !selectedTime) return
-    console.log('selectedDate: ', selectedDay, 'selectedTime: ', selectedTime)
     return set(selectedDay, {
       hours: Number(selectedTime.split(':')[0]),
       minutes: Number(selectedTime.split(':')[1]),
@@ -253,7 +252,6 @@ const ServiceItem = ({ service, barbershop }: ServiceItemProps) => {
                         selectedDate={selectedDate}
                       />
                     </div>
-                    // 47:00
                   )}
 
                   <SheetFooter className="px-5">
