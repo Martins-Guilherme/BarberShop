@@ -45,7 +45,7 @@ const Search = () => {
               <Input
                 {...field}
                 id="form-search"
-                arial-invalid={fieldState.invalid}
+                aria-invalid={fieldState.invalid}
                 placeholder="Faça sua busca..."
                 autoComplete="off"
               />
