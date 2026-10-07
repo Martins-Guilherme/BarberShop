@@ -97,4 +97,14 @@ model Booking {
   date      DateTime
   createdAt DateTime          @default(now())
   updatedAt DateTime          @updatedAt
+  review    ServiceReview?
+}
+
+model ServiceReview {
+  id        String   @id @default(uuid())
+  rating    Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  bookingId String   @unique
+  booking   Booking  @relation(fields: [bookingId], references: [id])
 }
