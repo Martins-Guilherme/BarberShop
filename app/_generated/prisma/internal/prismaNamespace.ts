@@ -403,7 +403,8 @@ export const ModelName = {
   VerificationToken: 'VerificationToken',
   Barbershop: 'Barbershop',
   BarbershopService: 'BarbershopService',
-  Booking: 'Booking'
+  Booking: 'Booking',
+  ServiceReview: 'ServiceReview'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -419,7 +420,7 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
     omit: GlobalOmitOptions
   }
   meta: {
-    modelProps: "user" | "account" | "session" | "verificationToken" | "barbershop" | "barbershopService" | "booking"
+    modelProps: "user" | "account" | "session" | "verificationToken" | "barbershop" | "barbershopService" | "booking" | "serviceReview"
     txIsolationLevel: TransactionIsolationLevel
   }
   model: {
@@ -941,6 +942,80 @@ export type TypeMap<ExtArgs extends runtime.Types.Extensions.InternalArgs = runt
         }
       }
     }
+    ServiceReview: {
+      payload: Prisma.$ServiceReviewPayload<ExtArgs>
+      fields: Prisma.ServiceReviewFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.ServiceReviewFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ServiceReviewPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.ServiceReviewFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ServiceReviewPayload>
+        }
+        findFirst: {
+          args: Prisma.ServiceReviewFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ServiceReviewPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.ServiceReviewFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ServiceReviewPayload>
+        }
+        findMany: {
+          args: Prisma.ServiceReviewFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ServiceReviewPayload>[]
+        }
+        create: {
+          args: Prisma.ServiceReviewCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ServiceReviewPayload>
+        }
+        createMany: {
+          args: Prisma.ServiceReviewCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.ServiceReviewCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ServiceReviewPayload>[]
+        }
+        delete: {
+          args: Prisma.ServiceReviewDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ServiceReviewPayload>
+        }
+        update: {
+          args: Prisma.ServiceReviewUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ServiceReviewPayload>
+        }
+        deleteMany: {
+          args: Prisma.ServiceReviewDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.ServiceReviewUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.ServiceReviewUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ServiceReviewPayload>[]
+        }
+        upsert: {
+          args: Prisma.ServiceReviewUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$ServiceReviewPayload>
+        }
+        aggregate: {
+          args: Prisma.ServiceReviewAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateServiceReview>
+        }
+        groupBy: {
+          args: Prisma.ServiceReviewGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ServiceReviewGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.ServiceReviewCountArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.ServiceReviewCountAggregateOutputType> | number
+        }
+      }
+    }
   }
 } & {
   other: {
@@ -1068,6 +1143,17 @@ export const BookingScalarFieldEnum = {
 } as const
 
 export type BookingScalarFieldEnum = (typeof BookingScalarFieldEnum)[keyof typeof BookingScalarFieldEnum]
+
+
+export const ServiceReviewScalarFieldEnum = {
+  id: 'id',
+  rating: 'rating',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  bookingId: 'bookingId'
+} as const
+
+export type ServiceReviewScalarFieldEnum = (typeof ServiceReviewScalarFieldEnum)[keyof typeof ServiceReviewScalarFieldEnum]
 
 
 export const SortOrder = {
@@ -1327,6 +1413,7 @@ export type GlobalOmitConfig = {
   barbershop?: Prisma.BarbershopOmit
   barbershopService?: Prisma.BarbershopServiceOmit
   booking?: Prisma.BookingOmit
+  serviceReview?: Prisma.ServiceReviewOmit
 }
 
 /* Types for Logging */

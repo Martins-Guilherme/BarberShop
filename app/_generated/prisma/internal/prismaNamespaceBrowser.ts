@@ -57,7 +57,8 @@ export const ModelName = {
   VerificationToken: 'VerificationToken',
   Barbershop: 'Barbershop',
   BarbershopService: 'BarbershopService',
-  Booking: 'Booking'
+  Booking: 'Booking',
+  ServiceReview: 'ServiceReview'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -164,6 +165,17 @@ export const BookingScalarFieldEnum = {
 } as const
 
 export type BookingScalarFieldEnum = (typeof BookingScalarFieldEnum)[keyof typeof BookingScalarFieldEnum]
+
+
+export const ServiceReviewScalarFieldEnum = {
+  id: 'id',
+  rating: 'rating',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
+  bookingId: 'bookingId'
+} as const
+
+export type ServiceReviewScalarFieldEnum = (typeof ServiceReviewScalarFieldEnum)[keyof typeof ServiceReviewScalarFieldEnum]
 
 
 export const SortOrder = {

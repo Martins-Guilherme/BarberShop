@@ -52,3 +52,8 @@ export type BarbershopService = Prisma.BarbershopServiceModel
  * 
  */
 export type Booking = Prisma.BookingModel
+/**
+ * Model ServiceReview
+ * 
+ */
+export type ServiceReview = Prisma.ServiceReviewModel
