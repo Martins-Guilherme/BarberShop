@@ -65,7 +65,7 @@ const UpdateScoreReview = ({
                       key={star}
                       className={`h-8 w-8 ${
                         star <= rating
-                          ? 'fill-yellow-400 text-yellow-400'
+                          ? 'fill-primary text-primary'
                           : 'text-muted-foreground'
                       }`}
                     />
@@ -76,23 +76,18 @@ const UpdateScoreReview = ({
           </DialogHeader>
           <DialogFooter className="flex flex-row items-center justify-center gap-3">
             <DialogClose className="w-full">
-              <Button variant="secondary" className="w-full">
-                Voltar
-              </Button>
-            </DialogClose>
-            <DialogClose className="w-full">
               {rating ? (
-                <>
-                  <Button
-                    disabled={status}
-                    className="w-full"
-                    onClick={() => handleSubmitReview(bookingId, rating)}
-                  >
-                    Confirmar
-                  </Button>
-                </>
+                <Button
+                  disabled={status}
+                  className="w-full"
+                  onClick={() => handleSubmitReview(bookingId, rating)}
+                >
+                  Confirmar
+                </Button>
               ) : (
-                <></>
+                <Button variant="secondary" className="w-full">
+                  Voltar
+                </Button>
               )}
             </DialogClose>
           </DialogFooter>
