@@ -33,6 +33,7 @@ import { toast } from 'sonner'
 import { deleteBooking } from '../_actions/delet-booking'
 import { useState } from 'react'
 import BookingSummary from './booking-summary'
+import UpdateScoreReview from './booking-update-review'
 
 interface BookingItemProps {
   booking: Prisma.BookingGetPayload<{
@@ -164,7 +165,7 @@ const BookingItem = ({ booking }: BookingItemProps) => {
                 </Button>
               }
             ></SheetClose>
-            {isConfirmed && (
+            {isConfirmed ? (
               <Dialog>
                 <DialogTrigger>
                   <Button className="w-full" variant="destructive">
@@ -197,6 +198,18 @@ const BookingItem = ({ booking }: BookingItemProps) => {
                       </Button>
                     </DialogClose>
                   </DialogFooter>
+                </DialogContent>
+              </Dialog>
+            ) : (
+              <Dialog>
+                <DialogTrigger>
+                  <Button className="w-full">Avaliar</Button>
+                </DialogTrigger>
+                <DialogContent className="w-full">
+                  <UpdateScoreReview
+                    barbershop={barbershop.name}
+                    bookingId={booking.id}
+                  />
                 </DialogContent>
               </Dialog>
             )}
