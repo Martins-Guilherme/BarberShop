@@ -73,9 +73,9 @@ export default async function Home() {
         <div className="relative mt-6 h-37.5 w-full">
           <Image
             alt="Agende nos melhores com FSW Barber"
-            src="/banner-01.png"
+            src="/baner.jpg"
             fill
-            className="rounded-xl object-cover"
+            className="rounded-xl object-fill"
           />
         </div>
         {/* Agendamento */}
