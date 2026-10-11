@@ -43,17 +43,20 @@ interface BookingItemProps {
           barbershop: true
         }
       }
+      review: true
     }
   }>
 }
 
 const BookingItem = ({ booking }: BookingItemProps) => {
   const [isSheetOpen, setIsSheetOpen] = useState(false)
-
+  const hasReview = !!booking.review
   const isConfirmed = isFuture(booking.date)
   const {
     service: { barbershop },
+    review,
   } = booking
+  const reviewRating = review?.rating ?? 0
 
   const handleDeleteBooking = async (bookingId: string) => {
     try {
@@ -61,8 +64,12 @@ const BookingItem = ({ booking }: BookingItemProps) => {
       setIsSheetOpen(false)
       toast.success('Reserva cancelada com sucesso!')
     } catch (error) {
-      console.log(error)
-      toast.error('Erro ao cancelar a reserva. Tente novamente mais tarde.')
+      console.error(error)
+      toast.error(
+        error instanceof Error
+          ? error.message
+          : 'Erro ao cancelar a reserva. Tente novamente mais tarde.'
+      )
     }
   }
 
@@ -77,12 +84,19 @@ const BookingItem = ({ booking }: BookingItemProps) => {
           <CardContent className="flex justify-between">
             {/* Esquerdo */}
             <div className="flex flex-col gap-2 py-5 pl-2">
-              <Badge
-                className="w-fit"
-                variant={isConfirmed ? 'default' : 'secondary'}
-              >
-                {isConfirmed ? 'Confirmado' : 'Finalizado'}
-              </Badge>
+              <div className="flex justify-between">
+                <Badge
+                  className="w-fit"
+                  variant={isConfirmed ? 'default' : 'secondary'}
+                >
+                  {isConfirmed ? 'Confirmado' : 'Finalizado'}
+                </Badge>
+                {hasReview && (
+                  <Badge className="w-fit" variant="link">
+                    Avaliado · {reviewRating}/5{' '}
+                  </Badge>
+                )}
+              </div>
               <h3 className="font-semibold">{booking?.service.name}</h3>
 
               <div className="flex items-center gap-2">
@@ -134,12 +148,15 @@ const BookingItem = ({ booking }: BookingItemProps) => {
         </div>
 
         <div className="mt-6">
-          <Badge
-            className="w-fit"
-            variant={isConfirmed ? 'default' : 'secondary'}
-          >
-            {isConfirmed ? 'Confirmado' : 'Finalizado'}
-          </Badge>
+          <div className="flex justify-between">
+            <Badge
+              className="w-fit"
+              variant={isConfirmed ? 'default' : 'secondary'}
+            >
+              {isConfirmed ? 'Confirmado' : 'Finalizado'}
+            </Badge>
+            {hasReview && <Badge>Avaliação: {reviewRating}/5</Badge>}
+          </div>
 
           <div className="mt-3 mb-6">
             <BookingSummary
@@ -167,11 +184,13 @@ const BookingItem = ({ booking }: BookingItemProps) => {
             ></SheetClose>
             {isConfirmed ? (
               <Dialog>
-                <DialogTrigger>
-                  <Button className="w-full" variant="destructive">
-                    Cancelar Reserva
-                  </Button>
-                </DialogTrigger>
+                <DialogTrigger
+                  render={
+                    <Button className="w-full" variant="destructive">
+                      Cancelar Reserva
+                    </Button>
+                  }
+                />
                 <DialogContent className="w-full">
                   <DialogHeader>
                     <DialogTitle>
@@ -183,29 +202,35 @@ const BookingItem = ({ booking }: BookingItemProps) => {
                     </DialogDescription>
                   </DialogHeader>
                   <DialogFooter className="flex flex-row items-center justify-center gap-3">
-                    <DialogClose className="w-full">
-                      <Button variant="secondary" className="w-full">
-                        Voltar
-                      </Button>
-                    </DialogClose>
-                    <DialogClose className="w-full">
-                      <Button
-                        className="w-full"
-                        variant="destructive"
-                        onClick={() => handleDeleteBooking(booking.id)}
-                      >
-                        confirmar
-                      </Button>
-                    </DialogClose>
+                    <DialogClose
+                      render={
+                        <Button variant="secondary" className="w-full">
+                          Voltar
+                        </Button>
+                      }
+                    />
+                    <DialogClose
+                      render={
+                        <Button
+                          className="w-full"
+                          variant="destructive"
+                          onClick={() => handleDeleteBooking(booking.id)}
+                        >
+                          Confirmar
+                        </Button>
+                      }
+                    />
                   </DialogFooter>
                 </DialogContent>
               </Dialog>
+            ) : hasReview ? (
+              []
             ) : (
               <Dialog>
-                <DialogTrigger>
-                  <Button className="w-full">Avaliar</Button>
-                </DialogTrigger>
-                <DialogContent showCloseButton={false} className="w-61.25">
+                <DialogTrigger
+                  render={<Button className="w-full">Avaliar</Button>}
+                />
+                <DialogContent showCloseButton={false} className="w-full">
                   <UpdateScoreReview
                     barbershop={barbershop.name}
                     bookingId={booking.id}
