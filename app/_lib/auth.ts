@@ -13,10 +13,7 @@ export const authOptions: AuthOptions = {
   ],
   callbacks: {
     async session({ session, user }) {
-      session.user = {
-        ...session.user,
-        id: user.id,
-      } as any
+      session.user.id = user.id
       return session
     },
   },
