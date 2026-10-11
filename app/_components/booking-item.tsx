@@ -205,7 +205,7 @@ const BookingItem = ({ booking }: BookingItemProps) => {
                 <DialogTrigger>
                   <Button className="w-full">Avaliar</Button>
                 </DialogTrigger>
-                <DialogContent className="w-full">
+                <DialogContent showCloseButton={false} className="w-61.25">
                   <UpdateScoreReview
                     barbershop={barbershop.name}
                     bookingId={booking.id}
