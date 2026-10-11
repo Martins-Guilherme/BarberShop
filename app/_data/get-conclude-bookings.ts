@@ -21,6 +21,7 @@ export const getConcludeBookings = async () => {
           barbershop: true,
         },
       },
+      review: true,
     },
     orderBy: {
       date: 'desc',
