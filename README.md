@@ -83,4 +83,6 @@ Em desenvolvimento e em constante evolução, focado em boas práticas, organiza
 
 Desenvolvido como parte do desafio Full Stack Week e como exercício de crescimento em desenvolvimento web e aplicações com Next.js.
 
-Felipe Rocha
+## Curso
+
+FullStack club - Felipe Rocha
