@@ -14,6 +14,7 @@ export const authOptions: AuthOptions = {
   callbacks: {
     async session({ session, user }) {
       session.user.id = user.id
+      session.user.role = (user as any).role ?? 'USER'
       return session
     },
   },
