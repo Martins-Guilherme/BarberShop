@@ -1,36 +1,86 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# FSW Barber
 
-## Getting Started
+Aplicação full stack para agendamento de serviços em barbearias, desenvolvida com Next.js, Prisma, PostgreSQL e autenticação via NextAuth.
 
-First, run the development server:
+## Visão geral
+
+O projeto simula uma experiência real de agendamento de barbearia, com busca por serviços, listagem de estabelecimentos, reserva de horários, autenticação do usuário e avaliação de atendimento após o serviço.
+
+## Funcionalidades
+
+- Busca e listagem de barbearias
+- Filtros por categoria/serviço
+- Visualização de detalhes da barbearia
+- Agendamento de horários
+- Autenticação com Google
+- Gestão de agendamentos confirmados e concluídos
+- Cancelamento de reservas
+- Avaliação de atendimento com nota de 1 a 5
+- Feedback visual com mensagens de sucesso e erro
+
+## Stack utilizada
+
+- Next.js 14
+- React
+- TypeScript
+- Prisma ORM
+- PostgreSQL
+- NextAuth
+- Tailwind CSS
+- shadcn/ui
+- date-fns
+- Sonner
+
+## Estrutura do projeto
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+app/
+  _actions/
+  _components/
+  _data/
+  _lib/
+  barbershops/
+  bookings/
+prisma/
+public/
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Como executar localmente
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+# instalar dependências
+pnpm install
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+# gerar cliente Prisma
+npx prisma generate
 
-## Learn More
+# iniciar o banco e aplicar migrations
+npx prisma migrate dev
 
-To learn more about Next.js, take a look at the following resources:
+# rodar a aplicação
+pnpm dev
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Acesse: http://localhost:3000
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Desafios implementados
 
-## Deploy on Vercel
+- Integração de autenticação com sessão do usuário
+- Persistência de dados com Prisma e PostgreSQL
+- Fluxo de agendamento e revisão de reservas
+- Lógica de apresentação condicional por status da reserva
+- Feedback de UI para ações de confirmação, cancelamento e avaliação
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Objetivo do projeto
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Este projeto foi construído para praticar e consolidar conceitos de desenvolvimento full stack, arquitetura de aplicações web modernas e experiência de usuário em um fluxo realista de agendamento.
+
+## Status
+
+Em desenvolvimento e em constante evolução, focado em boas práticas, organização de código e entrega de uma aplicação funcional e agradável.
+
+## Autor
+
+Desenvolvido como parte do desafio Full Stack Week e como exercício de crescimento em desenvolvimento web e aplicações com Next.js.
+
+Felipe Rocha
