@@ -2,7 +2,13 @@
 
 import { quickSearchOptinons } from '../_constants/search'
 import Link from 'next/link'
-import { CalendarIcon, HomeIcon, LogInIcon, LogOutIcon } from 'lucide-react'
+import {
+  BadgeDollarSignIcon,
+  CalendarIcon,
+  HomeIcon,
+  LogInIcon,
+  LogOutIcon,
+} from 'lucide-react'
 
 import { SheetClose, SheetContent, SheetHeader, SheetTitle } from './ui/sheet'
 import { Button } from './ui/button'
@@ -64,7 +70,7 @@ const SideBarSheet = () => {
             </Button>
           }
         ></SheetClose>
-        {data?.user ? (
+        {data?.user && data?.user?.role != 'ADMIN' ? (
           <Button
             className="justify-start gap-2"
             variant="ghost"
@@ -73,6 +79,24 @@ const SideBarSheet = () => {
             <CalendarIcon size={18} />
             Agendamentos
           </Button>
+        ) : (
+          []
+        )}
+        {data?.user?.role == 'ADMIN' ? (
+          <>
+            <SheetClose
+              render={
+                <Button
+                  className="justify-start gap-2"
+                  variant="ghost"
+                  render={<Link href="/admin" />}
+                >
+                  <BadgeDollarSignIcon size={18} />
+                  Dashboard
+                </Button>
+              }
+            />
+          </>
         ) : (
           []
         )}
