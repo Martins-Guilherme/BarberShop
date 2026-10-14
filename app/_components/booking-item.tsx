@@ -51,7 +51,16 @@ interface BookingItemProps {
 const BookingItem = ({ booking }: BookingItemProps) => {
   const [isSheetOpen, setIsSheetOpen] = useState(false)
   const hasReview = !!booking.review
-  const isConfirmed = isFuture(booking.date)
+  const canCancel =
+    isFuture(booking.date) &&
+    (booking.status === 'pending' || booking.status === 'confirmed')
+  const canReview = booking.status === 'finalized' && !hasReview
+  const statusLabel = {
+    pending: 'Pendente',
+    finalized: 'Finalizado',
+    confirmed: 'Confirmado',
+    cancel: 'Cancelado',
+  }[booking.status]
   const {
     service: { barbershop },
     review,
@@ -87,9 +96,11 @@ const BookingItem = ({ booking }: BookingItemProps) => {
               <div className="flex justify-between">
                 <Badge
                   className="w-fit"
-                  variant={isConfirmed ? 'default' : 'secondary'}
+                  variant={
+                    booking.status === 'confirmed' ? 'default' : 'secondary'
+                  }
                 >
-                  {isConfirmed ? 'Confirmado' : 'Finalizado'}
+                  {statusLabel}
                 </Badge>
                 {hasReview && (
                   <Badge className="w-fit" variant="link">
@@ -151,9 +162,9 @@ const BookingItem = ({ booking }: BookingItemProps) => {
           <div className="flex justify-between">
             <Badge
               className="w-fit"
-              variant={isConfirmed ? 'default' : 'secondary'}
+              variant={booking.status === 'confirmed' ? 'default' : 'secondary'}
             >
-              {isConfirmed ? 'Confirmado' : 'Finalizado'}
+              {statusLabel}
             </Badge>
             {hasReview && <Badge>Avaliação: {reviewRating}/5</Badge>}
           </div>
@@ -182,7 +193,7 @@ const BookingItem = ({ booking }: BookingItemProps) => {
                 </Button>
               }
             ></SheetClose>
-            {isConfirmed ? (
+            {canCancel ? (
               <Dialog>
                 <DialogTrigger
                   render={
@@ -223,9 +234,7 @@ const BookingItem = ({ booking }: BookingItemProps) => {
                   </DialogFooter>
                 </DialogContent>
               </Dialog>
-            ) : hasReview ? (
-              []
-            ) : (
+            ) : canReview ? (
               <Dialog>
                 <DialogTrigger
                   render={<Button className="w-full">Avaliar</Button>}
@@ -237,7 +246,7 @@ const BookingItem = ({ booking }: BookingItemProps) => {
                   />
                 </DialogContent>
               </Dialog>
-            )}
+            ) : null}
           </div>
         </SheetFooter>
       </SheetContent>
