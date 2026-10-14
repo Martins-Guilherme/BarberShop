@@ -11,6 +11,7 @@ export const getConcludeBookings = async () => {
   return db.booking.findMany({
     where: {
       userId: (session.user as any).id,
+      status: { equals: 'finalized' },
       date: {
         lt: new Date(),
       },

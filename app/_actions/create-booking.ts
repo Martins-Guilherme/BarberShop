@@ -16,7 +16,7 @@ export const createBooking = async (params: CreateBookingParams) => {
     throw new Error('Usuario não autenticado!')
   }
   await db.booking.create({
-    data: { ...params, userId: (user.user as any).id },
+    data: { ...params, userId: (user.user as any).id, status: 'pending' },
   })
   revalidatePath('/barbershops/[id]')
   revalidatePath('/bookings')

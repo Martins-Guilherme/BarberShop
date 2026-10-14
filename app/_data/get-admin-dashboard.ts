@@ -13,29 +13,29 @@ export const getAdminDashboard = async () => {
     redirect('/')
   }
 
-  const [totalBookings, confirmedBookings, completedBookings, averageRating] =
-    await Promise.all([
-      db.booking.count(),
-      db.booking.count({
-        where: {
-          date: {
-            gte: new Date(),
-          },
-        },
-      }),
-      db.booking.count({
-        where: {
-          date: {
-            lt: new Date(),
-          },
-        },
-      }),
-      db.serviceReview.aggregate({
-        _avg: {
-          rating: true,
-        },
-      }),
-    ])
+  const [
+    totalBookings,
+    pendingBookings,
+    confirmedBookings,
+    completedBookings,
+    averageRating,
+  ] = await Promise.all([
+    db.booking.count({ where: { status: { not: 'cancel' } } }),
+    db.booking.count({
+      where: { status: 'pending' },
+    }),
+    db.booking.count({
+      where: { status: 'confirmed' },
+    }),
+    db.booking.count({
+      where: { status: 'finalized' },
+    }),
+    db.serviceReview.aggregate({
+      _avg: {
+        rating: true,
+      },
+    }),
+  ])
 
   const recentBookings = await db.booking.findMany({
     take: 6,
@@ -60,6 +60,7 @@ export const getAdminDashboard = async () => {
 
   return {
     totalBookings,
+    pendingBookings,
     confirmedBookings,
     completedBookings,
     averageRating: Number(averageRating._avg.rating ?? 0),

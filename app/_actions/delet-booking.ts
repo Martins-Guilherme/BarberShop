@@ -13,20 +13,19 @@ export async function deleteBooking(bookingId: string) {
     throw new Error('Você precisa estar logado para cancelar a reserva.')
   }
 
-  const booking = await db.booking.findUnique({
-    where: { id: bookingId },
-    select: { userId: true },
-  })
-
-  if (!booking || booking.userId !== session.user.id) {
-    throw new Error('Reserva não encontrada ou não pertence ao usuário atual.')
-  }
-
-  await db.booking.delete({
+  const { count } = await db.booking.updateMany({
     where: {
       id: bookingId,
+      userId: session.user.id,
+      status: { in: ['pending', 'confirmed'] },
     },
+    data: { status: 'cancel' },
   })
 
+  if (count === 0) {
+    throw new Error('Reserva não encontrada, já cancelada ou finalizada.')
+  }
+
+  revalidatePath('/')
   revalidatePath('/bookings')
 }

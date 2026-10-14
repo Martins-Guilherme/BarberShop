@@ -11,6 +11,7 @@ interface GetBookingsProps {
 export const getBookings = ({ date }: GetBookingsProps) => {
   return db.booking.findMany({
     where: {
+      status: { not: 'cancel' },
       date: {
         lte: endOfDay(date),
         gte: startOfDay(date),
