@@ -25,7 +25,7 @@ const Bookings = async () => {
         )}
         {confirmedBookings.length > 0 ? (
           <h2 className="mt-6 mb-3 text-xs font-bold text-gray-400 uppercase">
-            Confirmados
+            Próximos agendamentos
           </h2>
         ) : (
           []
@@ -40,7 +40,7 @@ const Bookings = async () => {
         </div>
         {concludeBookings.length > 0 ? (
           <h2 className="mt-6 mb-3 text-xs font-bold text-gray-400 uppercase">
-            Finalizados
+            Agendamentos anteriores
           </h2>
         ) : (
           []
