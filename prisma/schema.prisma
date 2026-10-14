@@ -17,6 +17,13 @@ enum Role {
   ADMIN
 }
 
+enum BookingStatus {
+  pending
+  finalized
+  confirmed
+  cancel
+}
+
 model User {
   id            String    @id @default(cuid())
   name          String?
@@ -101,6 +108,7 @@ model Booking {
   serviceId String
   service   BarbershopService @relation(fields: [serviceId], references: [id])
   date      DateTime
+  status    BookingStatus     @default(pending)
   createdAt DateTime          @default(now())
   updatedAt DateTime          @updatedAt
   review    ServiceReview?
