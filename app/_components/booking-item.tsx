@@ -212,7 +212,7 @@ const BookingItem = ({ booking }: BookingItemProps) => {
                       recuperá-la.
                     </DialogDescription>
                   </DialogHeader>
-                  <DialogFooter className="flex flex-row items-center justify-center gap-3">
+                  <DialogFooter className="flex min-w-max flex-col sm:flex sm:flex-col">
                     <DialogClose
                       render={
                         <Button variant="secondary" className="w-full">
