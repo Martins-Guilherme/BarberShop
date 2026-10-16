@@ -14,9 +14,12 @@ import { authOptions } from './_lib/auth'
 import { format } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
 import { getConfirmedBookings } from './_data/get-confirmed-bookings'
+import { redirect } from 'next/navigation'
 
 export default async function Home() {
   const session = await getServerSession(authOptions)
+  const isAdmin = session?.user.role
+  if (isAdmin === 'ADMIN') return redirect('/admin')
 
   const barbershops = await db.barbershop.findMany({})
   const popularBarbeshop = await db.barbershop.findMany({
