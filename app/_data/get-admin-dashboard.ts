@@ -5,6 +5,7 @@ import { redirect } from 'next/navigation'
 
 import { authOptions } from '../_lib/auth'
 import { db } from '../_lib/prisma'
+import { finalizeExpiredBookings } from './finalize-expired-bookings'
 
 export const getAdminDashboard = async () => {
   const session = await getServerSession(authOptions)
@@ -12,6 +13,8 @@ export const getAdminDashboard = async () => {
   if (!session?.user || session.user.role !== 'ADMIN') {
     redirect('/')
   }
+
+  await finalizeExpiredBookings()
 
   const [
     totalBookings,

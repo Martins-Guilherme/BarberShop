@@ -33,6 +33,7 @@ export const UptoDateReview = async ({
     select: {
       userId: true,
       date: true,
+      status: true,
       review: { select: { id: true } },
     },
   })
@@ -45,6 +46,13 @@ export const UptoDateReview = async ({
     return {
       success: false,
       error: 'Você só pode realizar a avaliação após o atendimento.',
+    }
+  }
+
+  if (booking.status !== 'finalized') {
+    return {
+      success: false,
+      error: 'Este agendamento ainda não foi finalizado.',
     }
   }
 
