@@ -101,6 +101,14 @@ model BarbershopService {
   bookings     Booking[]
 }
 
+model WeeklyAvailability {
+  weekday   Int      @id
+  isOpen    Boolean  @default(false)
+  startTime String   @default("08:00")
+  endTime   String   @default("18:00")
+  updatedAt DateTime @updatedAt
+}
+
 model Booking {
   id        String            @id @default(uuid())
   userId    String

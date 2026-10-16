@@ -60,6 +60,7 @@ export const ModelName = {
   VerificationToken: 'VerificationToken',
   Barbershop: 'Barbershop',
   BarbershopService: 'BarbershopService',
+  WeeklyAvailability: 'WeeklyAvailability',
   Booking: 'Booking',
   ServiceReview: 'ServiceReview',
 } as const
@@ -158,6 +159,17 @@ export const BarbershopServiceScalarFieldEnum = {
 
 export type BarbershopServiceScalarFieldEnum =
   (typeof BarbershopServiceScalarFieldEnum)[keyof typeof BarbershopServiceScalarFieldEnum]
+
+export const WeeklyAvailabilityScalarFieldEnum = {
+  weekday: 'weekday',
+  isOpen: 'isOpen',
+  startTime: 'startTime',
+  endTime: 'endTime',
+  updatedAt: 'updatedAt',
+} as const
+
+export type WeeklyAvailabilityScalarFieldEnum =
+  (typeof WeeklyAvailabilityScalarFieldEnum)[keyof typeof WeeklyAvailabilityScalarFieldEnum]
 
 export const BookingScalarFieldEnum = {
   id: 'id',

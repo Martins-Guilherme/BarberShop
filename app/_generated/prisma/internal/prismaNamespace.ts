@@ -433,6 +433,7 @@ export const ModelName = {
   VerificationToken: 'VerificationToken',
   Barbershop: 'Barbershop',
   BarbershopService: 'BarbershopService',
+  WeeklyAvailability: 'WeeklyAvailability',
   Booking: 'Booking',
   ServiceReview: 'ServiceReview',
 } as const
@@ -463,6 +464,7 @@ export type TypeMap<
       | 'verificationToken'
       | 'barbershop'
       | 'barbershopService'
+      | 'weeklyAvailability'
       | 'booking'
       | 'serviceReview'
     txIsolationLevel: TransactionIsolationLevel
@@ -924,6 +926,82 @@ export type TypeMap<
         }
       }
     }
+    WeeklyAvailability: {
+      payload: Prisma.$WeeklyAvailabilityPayload<ExtArgs>
+      fields: Prisma.WeeklyAvailabilityFieldRefs
+      operations: {
+        findUnique: {
+          args: Prisma.WeeklyAvailabilityFindUniqueArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WeeklyAvailabilityPayload> | null
+        }
+        findUniqueOrThrow: {
+          args: Prisma.WeeklyAvailabilityFindUniqueOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WeeklyAvailabilityPayload>
+        }
+        findFirst: {
+          args: Prisma.WeeklyAvailabilityFindFirstArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WeeklyAvailabilityPayload> | null
+        }
+        findFirstOrThrow: {
+          args: Prisma.WeeklyAvailabilityFindFirstOrThrowArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WeeklyAvailabilityPayload>
+        }
+        findMany: {
+          args: Prisma.WeeklyAvailabilityFindManyArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WeeklyAvailabilityPayload>[]
+        }
+        create: {
+          args: Prisma.WeeklyAvailabilityCreateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WeeklyAvailabilityPayload>
+        }
+        createMany: {
+          args: Prisma.WeeklyAvailabilityCreateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        createManyAndReturn: {
+          args: Prisma.WeeklyAvailabilityCreateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WeeklyAvailabilityPayload>[]
+        }
+        delete: {
+          args: Prisma.WeeklyAvailabilityDeleteArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WeeklyAvailabilityPayload>
+        }
+        update: {
+          args: Prisma.WeeklyAvailabilityUpdateArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WeeklyAvailabilityPayload>
+        }
+        deleteMany: {
+          args: Prisma.WeeklyAvailabilityDeleteManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateMany: {
+          args: Prisma.WeeklyAvailabilityUpdateManyArgs<ExtArgs>
+          result: BatchPayload
+        }
+        updateManyAndReturn: {
+          args: Prisma.WeeklyAvailabilityUpdateManyAndReturnArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WeeklyAvailabilityPayload>[]
+        }
+        upsert: {
+          args: Prisma.WeeklyAvailabilityUpsertArgs<ExtArgs>
+          result: runtime.Types.Utils.PayloadToResult<Prisma.$WeeklyAvailabilityPayload>
+        }
+        aggregate: {
+          args: Prisma.WeeklyAvailabilityAggregateArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.AggregateWeeklyAvailability>
+        }
+        groupBy: {
+          args: Prisma.WeeklyAvailabilityGroupByArgs<ExtArgs>
+          result: runtime.Types.Utils.Optional<Prisma.WeeklyAvailabilityGroupByOutputType>[]
+        }
+        count: {
+          args: Prisma.WeeklyAvailabilityCountArgs<ExtArgs>
+          result:
+            | runtime.Types.Utils.Optional<Prisma.WeeklyAvailabilityCountAggregateOutputType>
+            | number
+        }
+      }
+    }
     Booking: {
       payload: Prisma.$BookingPayload<ExtArgs>
       fields: Prisma.BookingFieldRefs
@@ -1194,6 +1272,17 @@ export const BarbershopServiceScalarFieldEnum = {
 export type BarbershopServiceScalarFieldEnum =
   (typeof BarbershopServiceScalarFieldEnum)[keyof typeof BarbershopServiceScalarFieldEnum]
 
+export const WeeklyAvailabilityScalarFieldEnum = {
+  weekday: 'weekday',
+  isOpen: 'isOpen',
+  startTime: 'startTime',
+  endTime: 'endTime',
+  updatedAt: 'updatedAt',
+} as const
+
+export type WeeklyAvailabilityScalarFieldEnum =
+  (typeof WeeklyAvailabilityScalarFieldEnum)[keyof typeof WeeklyAvailabilityScalarFieldEnum]
+
 export const BookingScalarFieldEnum = {
   id: 'id',
   userId: 'userId',
@@ -1321,6 +1410,14 @@ export type DecimalFieldRefInput<$PrismaModel> = FieldRefInputType<
 export type ListDecimalFieldRefInput<$PrismaModel> = FieldRefInputType<
   $PrismaModel,
   'Decimal[]'
+>
+
+/**
+ * Reference to a field of type 'Boolean'
+ */
+export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<
+  $PrismaModel,
+  'Boolean'
 >
 
 /**
@@ -1516,6 +1613,7 @@ export type GlobalOmitConfig = {
   verificationToken?: Prisma.VerificationTokenOmit
   barbershop?: Prisma.BarbershopOmit
   barbershopService?: Prisma.BarbershopServiceOmit
+  weeklyAvailability?: Prisma.WeeklyAvailabilityOmit
   booking?: Prisma.BookingOmit
   serviceReview?: Prisma.ServiceReviewOmit
 }
