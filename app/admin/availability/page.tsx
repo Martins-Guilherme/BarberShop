@@ -1,5 +1,5 @@
-import { getWeeklyAvailability } from '../../_data/get-weekly-availability'
-import { AvailabilityForm } from '../availability-form'
+import { AvailabilityForm } from '@/app/_components/availability-form'
+import { getWeeklyAvailability } from '@/app/_data/get-weekly-availability'
 
 export default async function AvailabilityPage() {
   const availability = await getWeeklyAvailability()

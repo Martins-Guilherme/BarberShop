@@ -5,8 +5,8 @@ import { toast } from 'sonner'
 
 import { saveWeeklyAvailability } from '../_actions/save-weekly-availability'
 import type { WeeklyAvailabilityEntry } from '../_data/get-weekly-availability'
-import { Button } from '../_components/ui/button'
-import { Card, CardContent } from '../_components/ui/card'
+import { Button } from './ui/button'
+import { Card, CardContent } from './ui/card'
 
 const weekdays = [
   'Domingo',

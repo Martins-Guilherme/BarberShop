@@ -6,9 +6,9 @@ import { useState } from 'react'
 import { toast } from 'sonner'
 
 import { confirmPendingBooking } from '../_actions/confirm-pending-booking'
-import BookingSummary from '../_components/booking-summary'
-import { Button } from '../_components/ui/button'
-import { Calendar } from '../_components/ui/calendar'
+import BookingSummary from './booking-summary'
+import { Button } from './ui/button'
+import { Calendar } from './ui/calendar'
 import {
   Dialog,
   DialogContent,
@@ -16,7 +16,7 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from '../_components/ui/dialog'
+} from './ui/dialog'
 
 interface PendingBookingPreviewItem {
   id: string

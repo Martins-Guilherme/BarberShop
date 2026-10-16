@@ -5,7 +5,7 @@ import { format } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
 
 import type { BookingStatus } from '../_generated/prisma/client'
-import type { DataTableFeatures } from '../_components/data-table-features'
+import type { DataTableFeatures } from '../admin/data-table-features'
 
 export type AdminBooking = {
   id: string

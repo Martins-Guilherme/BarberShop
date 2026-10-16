@@ -9,11 +9,8 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '../_components/ui/table'
-import {
-  features,
-  type DataTableFeatures,
-} from '../_components/data-table-features'
+} from './ui/table'
+import { features, type DataTableFeatures } from '../admin/data-table-features'
 import { bookingColumns, type AdminBooking } from './bookings-columns'
 
 interface BookingsDataTableProps {

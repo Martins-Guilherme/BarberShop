@@ -1,9 +1,8 @@
 import { getServerSession } from 'next-auth'
 import { redirect } from 'next/navigation'
-
 import Header from '../_components/header'
 import { authOptions } from '../_lib/auth'
-import { AdminNavigation } from './admin-navigation'
+import { AdminNavigation } from '../_components/admin-navigation'
 
 export default async function AdminLayout({
   children,

@@ -4,8 +4,8 @@ import { getServerSession } from 'next-auth'
 import { authOptions } from '../_lib/auth'
 import { getAdminDashboard } from '../_data/get-admin-dashboard'
 import DashBoardItem from '../_components/dashboard-item'
-import { BookingsDataTable } from './bookings-data-table'
-import { PendingBookingsPreview } from './pending-bookings-preview'
+import { BookingsDataTable } from '../_components/bookings-data-table'
+import { PendingBookingsPreview } from '../_components/pending-bookings-preview'
 
 export default async function AdminPage() {
   const session = await getServerSession(authOptions)
