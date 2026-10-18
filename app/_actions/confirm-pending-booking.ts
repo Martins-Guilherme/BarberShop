@@ -4,6 +4,7 @@ import { revalidatePath } from 'next/cache'
 import { getServerSession } from 'next-auth'
 
 import { authOptions } from '../_lib/auth'
+import { expireUnpaidBookings } from '../_lib/expire-unpaid-bookings'
 import { db } from '../_lib/prisma'
 
 export const confirmPendingBooking = async (bookingId: string) => {
@@ -13,10 +14,13 @@ export const confirmPendingBooking = async (bookingId: string) => {
     throw new Error('Você não tem permissão para confirmar agendamentos.')
   }
 
+  await expireUnpaidBookings()
+
   const { count } = await db.booking.updateMany({
     where: {
       id: bookingId,
       status: 'pending',
+      paymentStatus: 'approved',
       date: { gt: new Date() },
     },
     data: { status: 'confirmed' },

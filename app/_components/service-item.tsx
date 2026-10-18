@@ -18,7 +18,13 @@ import SigInDialog from './signin-dialog'
 import { Button } from './ui/button'
 import { Calendar } from './ui/calendar'
 import { Card, CardContent } from './ui/card'
-import { Dialog, DialogContent } from './ui/dialog'
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from './ui/dialog'
 import {
   Sheet,
   SheetContent,
@@ -89,6 +95,13 @@ const ServiceItem = ({
   const [dayBookings, setDayBookings] = useState<Booking[]>([])
   const [signInDialogIsOpen, setSignInDialogIsOpen] = useState(false)
   const [bookingSheetIsOpen, setBookingSheetIsOpen] = useState(false)
+  const [isCreatingBooking, setIsCreatingBooking] = useState(false)
+  const [pixPayment, setPixPayment] = useState<{
+    qrCode: string
+    qrCodeBase64: string
+    expiresAt: string | null
+  }>()
+  const [pixDialogIsOpen, setPixDialogIsOpen] = useState(false)
   const { data } = useSession()
 
   const availableWeekdays = new Set(
@@ -98,26 +111,26 @@ const ServiceItem = ({
   )
 
   const handleCreateBooking = async () => {
-    if (!selectedDate) return
+    if (!selectedDate || isCreatingBooking) return
+    setIsCreatingBooking(true)
     try {
-      await createBooking({
+      const payment = await createBooking({
         serviceId: service.id,
         date: selectedDate,
       })
       handleBookingSheetIsOpenChange()
-      toast.success('Reserva criada com sucesso!', {
-        action: {
-          label: 'Ver agendamentos',
-          onClick: () => router.push('/bookings'),
-        },
-      })
+      setPixPayment(payment)
+      setPixDialogIsOpen(true)
+      toast.success('QR Pix gerado. Conclua o pagamento em até 1 hora.')
     } catch (error) {
       console.error(error)
       toast.error(
         error instanceof Error
           ? error.message
-          : 'Erro ao tentar criar o agendamento!'
+          : 'Erro ao iniciar o pagamento. Tente novamente.'
       )
+    } finally {
+      setIsCreatingBooking(false)
     }
   }
 
@@ -271,12 +284,19 @@ const ServiceItem = ({
                   )}
 
                   <SheetFooter className="px-5">
+                    <p className="text-muted-foreground px-5 text-center text-xs">
+                      Após confirmar, você terá 1 hora para concluir o
+                      pagamento. A reserva só será confirmada pela barbearia
+                      depois da aprovação.
+                    </p>
                     <Button
                       type="submit"
-                      disabled={!selectedTime || !selectedDay}
+                      disabled={
+                        !selectedTime || !selectedDay || isCreatingBooking
+                      }
                       onClick={handleCreateBooking}
                     >
-                      Confirmar
+                      {isCreatingBooking ? 'Gerando QR Pix...' : 'Gerar QR Pix'}
                     </Button>
                   </SheetFooter>
                 </SheetContent>
@@ -289,6 +309,68 @@ const ServiceItem = ({
       <Dialog open={signInDialogIsOpen} onOpenChange={setSignInDialogIsOpen}>
         <DialogContent className="w-[80%]">
           <SigInDialog />
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={pixDialogIsOpen} onOpenChange={setPixDialogIsOpen}>
+        <DialogContent className="w-[90%] sm:max-w-md">
+          <DialogHeader>
+            <DialogTitle>Pagamento via Pix</DialogTitle>
+            <DialogDescription>
+              Escaneie o QR Code ou copie o código Pix. O pagamento deve ser
+              feito em até 1 hora; depois disso, a reserva expira.
+              {pixPayment?.expiresAt &&
+                ` Prazo: ${new Date(pixPayment.expiresAt).toLocaleTimeString(
+                  'pt-BR',
+                  { hour: '2-digit', minute: '2-digit' }
+                )}.`}
+            </DialogDescription>
+          </DialogHeader>
+          <p className="text-center text-sm font-semibold">
+            Valor:{' '}
+            {Intl.NumberFormat('pt-BR', {
+              style: 'currency',
+              currency: 'BRL',
+            }).format(Number(service.price))}
+          </p>
+          {pixPayment && (
+            <div className="flex flex-col items-center gap-3">
+              <Image
+                src={`data:image/png;base64,${pixPayment.qrCodeBase64}`}
+                alt="QR Code para pagamento Pix"
+                width={240}
+                height={240}
+                unoptimized
+              />
+              <p className="bg-muted w-full rounded-md p-3 text-xs break-all">
+                {pixPayment.qrCode}
+              </p>
+              <Button
+                className="w-full"
+                onClick={async () => {
+                  try {
+                    await navigator.clipboard.writeText(pixPayment.qrCode)
+                    toast.success('Código Pix copiado.')
+                  } catch (error) {
+                    console.error(error)
+                    toast.error('Não foi possível copiar o código Pix.')
+                  }
+                }}
+              >
+                Copiar código Pix
+              </Button>
+              <Button
+                className="w-full"
+                variant="outline"
+                onClick={() => {
+                  setPixDialogIsOpen(false)
+                  router.push('/bookings')
+                }}
+              >
+                Ver meus agendamentos
+              </Button>
+            </div>
+          )}
         </DialogContent>
       </Dialog>
     </>

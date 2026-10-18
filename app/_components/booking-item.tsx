@@ -86,6 +86,18 @@ const BookingItem = ({ booking }: BookingItemProps) => {
     setIsSheetOpen(isOpen)
   }
 
+  const handleCopyPixCode = async () => {
+    if (!booking.pixQrCode) return
+
+    try {
+      await navigator.clipboard.writeText(booking.pixQrCode)
+      toast.success('Código Pix copiado.')
+    } catch (error) {
+      console.error(error)
+      toast.error('Não foi possível copiar o código Pix.')
+    }
+  }
+
   return (
     <Sheet open={isSheetOpen} onOpenChange={handleSheetOpenChange}>
       <SheetTrigger className="w-full min-w-[90%]">
@@ -176,6 +188,52 @@ const BookingItem = ({ booking }: BookingItemProps) => {
               selectedDate={booking.date}
             />
           </div>
+
+          {booking.status === 'pending' && (
+            <div className="mb-4 space-y-2 text-sm">
+              <p>
+                Pagamento:{' '}
+                {booking.paymentStatus === 'approved'
+                  ? 'Aprovado'
+                  : booking.paymentStatus === 'rejected'
+                    ? 'Recusado'
+                    : 'Aguardando'}
+              </p>
+              {booking.paymentStatus !== 'approved' &&
+                booking.checkoutUrl &&
+                booking.paymentExpiresAt &&
+                new Date(booking.paymentExpiresAt) > new Date() && (
+                  <a
+                    href={booking.checkoutUrl}
+                    className="text-primary inline-block underline"
+                  >
+                    Retomar pagamento
+                  </a>
+                )}
+              {booking.paymentStatus !== 'approved' &&
+                booking.pixQrCode &&
+                booking.pixQrCodeBase64 && (
+                  <div className="space-y-2 rounded-lg border p-3">
+                    <p>Escaneie o QR Pix ou copie o código para pagar.</p>
+                    <Image
+                      src={`data:image/png;base64,${booking.pixQrCodeBase64}`}
+                      alt="QR Code para pagamento Pix"
+                      width={220}
+                      height={220}
+                      unoptimized
+                      className="mx-auto"
+                    />
+                    <Button
+                      className="w-full"
+                      variant="outline"
+                      onClick={() => void handleCopyPixCode()}
+                    >
+                      Copiar código Pix
+                    </Button>
+                  </div>
+                )}
+            </div>
+          )}
 
           <div className="space-y-3">
             {barbershop.phones.map((phone, index) => (

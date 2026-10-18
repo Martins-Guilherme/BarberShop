@@ -167,14 +167,46 @@ export function PendingBookingsPreview({
                     barbershop={booking.service.barbershop}
                     selectedDate={booking.date}
                   />
+                  <div className="text-muted-foreground space-y-1 text-sm">
+                    <p>
+                      Pagamento:{' '}
+                      <span className="text-foreground font-medium">
+                        {booking.paymentStatus === 'approved'
+                          ? 'Aprovado'
+                          : booking.paymentStatus === 'rejected'
+                            ? 'Recusado'
+                            : 'Aguardando'}
+                      </span>
+                    </p>
+                    <p>
+                      Valor:{' '}
+                      {Intl.NumberFormat('pt-BR', {
+                        style: 'currency',
+                        currency: 'BRL',
+                      }).format(booking.paymentAmount)}
+                    </p>
+                    {booking.paymentExpiresAt && (
+                      <p>
+                        Prazo para pagamento:{' '}
+                        {format(new Date(booking.paymentExpiresAt), 'HH:mm', {
+                          locale: ptBR,
+                        })}
+                      </p>
+                    )}
+                  </div>
                   <Button
                     className="w-full"
-                    disabled={confirmingBookingId !== null}
+                    disabled={
+                      confirmingBookingId !== null ||
+                      booking.paymentStatus !== 'approved'
+                    }
                     onClick={() => handleConfirm(booking.id)}
                   >
                     {confirmingBookingId === booking.id
                       ? 'Confirmando...'
-                      : 'Confirmar agendamento'}
+                      : booking.paymentStatus === 'approved'
+                        ? 'Confirmar agendamento'
+                        : 'Aguardando pagamento aprovado'}
                   </Button>
                 </article>
               ))
