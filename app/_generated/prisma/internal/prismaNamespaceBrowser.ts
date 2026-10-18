@@ -83,13 +83,13 @@ export type TransactionIsolationLevel =
 
 export const UserScalarFieldEnum = {
   id: 'id',
-  name: 'name',
   email: 'email',
+  name: 'name',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt',
   emailVerified: 'emailVerified',
   image: 'image',
   role: 'role',
-  createdAt: 'createdAt',
-  updatedAt: 'updatedAt',
 } as const
 
 export type UserScalarFieldEnum =
@@ -176,9 +176,17 @@ export const BookingScalarFieldEnum = {
   userId: 'userId',
   serviceId: 'serviceId',
   date: 'date',
-  status: 'status',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt',
+  status: 'status',
+  paymentStatus: 'paymentStatus',
+  paymentAmount: 'paymentAmount',
+  paymentExpiresAt: 'paymentExpiresAt',
+  mercadoPagoPreferenceId: 'mercadoPagoPreferenceId',
+  mercadoPagoPaymentId: 'mercadoPagoPaymentId',
+  checkoutUrl: 'checkoutUrl',
+  pixQrCode: 'pixQrCode',
+  pixQrCodeBase64: 'pixQrCodeBase64',
 } as const
 
 export type BookingScalarFieldEnum =

@@ -20,8 +20,18 @@ export type BookingModel =
 
 export type AggregateBooking = {
   _count: BookingCountAggregateOutputType | null
+  _avg: BookingAvgAggregateOutputType | null
+  _sum: BookingSumAggregateOutputType | null
   _min: BookingMinAggregateOutputType | null
   _max: BookingMaxAggregateOutputType | null
+}
+
+export type BookingAvgAggregateOutputType = {
+  paymentAmount: runtime.Decimal | null
+}
+
+export type BookingSumAggregateOutputType = {
+  paymentAmount: runtime.Decimal | null
 }
 
 export type BookingMinAggregateOutputType = {
@@ -29,9 +39,17 @@ export type BookingMinAggregateOutputType = {
   userId: string | null
   serviceId: string | null
   date: Date | null
-  status: $Enums.BookingStatus | null
   createdAt: Date | null
   updatedAt: Date | null
+  status: $Enums.BookingStatus | null
+  paymentStatus: $Enums.PaymentStatus | null
+  paymentAmount: runtime.Decimal | null
+  paymentExpiresAt: Date | null
+  mercadoPagoPreferenceId: string | null
+  mercadoPagoPaymentId: string | null
+  checkoutUrl: string | null
+  pixQrCode: string | null
+  pixQrCodeBase64: string | null
 }
 
 export type BookingMaxAggregateOutputType = {
@@ -39,9 +57,17 @@ export type BookingMaxAggregateOutputType = {
   userId: string | null
   serviceId: string | null
   date: Date | null
-  status: $Enums.BookingStatus | null
   createdAt: Date | null
   updatedAt: Date | null
+  status: $Enums.BookingStatus | null
+  paymentStatus: $Enums.PaymentStatus | null
+  paymentAmount: runtime.Decimal | null
+  paymentExpiresAt: Date | null
+  mercadoPagoPreferenceId: string | null
+  mercadoPagoPaymentId: string | null
+  checkoutUrl: string | null
+  pixQrCode: string | null
+  pixQrCodeBase64: string | null
 }
 
 export type BookingCountAggregateOutputType = {
@@ -49,10 +75,26 @@ export type BookingCountAggregateOutputType = {
   userId: number
   serviceId: number
   date: number
-  status: number
   createdAt: number
   updatedAt: number
+  status: number
+  paymentStatus: number
+  paymentAmount: number
+  paymentExpiresAt: number
+  mercadoPagoPreferenceId: number
+  mercadoPagoPaymentId: number
+  checkoutUrl: number
+  pixQrCode: number
+  pixQrCodeBase64: number
   _all: number
+}
+
+export type BookingAvgAggregateInputType = {
+  paymentAmount?: true
+}
+
+export type BookingSumAggregateInputType = {
+  paymentAmount?: true
 }
 
 export type BookingMinAggregateInputType = {
@@ -60,9 +102,17 @@ export type BookingMinAggregateInputType = {
   userId?: true
   serviceId?: true
   date?: true
-  status?: true
   createdAt?: true
   updatedAt?: true
+  status?: true
+  paymentStatus?: true
+  paymentAmount?: true
+  paymentExpiresAt?: true
+  mercadoPagoPreferenceId?: true
+  mercadoPagoPaymentId?: true
+  checkoutUrl?: true
+  pixQrCode?: true
+  pixQrCodeBase64?: true
 }
 
 export type BookingMaxAggregateInputType = {
@@ -70,9 +120,17 @@ export type BookingMaxAggregateInputType = {
   userId?: true
   serviceId?: true
   date?: true
-  status?: true
   createdAt?: true
   updatedAt?: true
+  status?: true
+  paymentStatus?: true
+  paymentAmount?: true
+  paymentExpiresAt?: true
+  mercadoPagoPreferenceId?: true
+  mercadoPagoPaymentId?: true
+  checkoutUrl?: true
+  pixQrCode?: true
+  pixQrCodeBase64?: true
 }
 
 export type BookingCountAggregateInputType = {
@@ -80,9 +138,17 @@ export type BookingCountAggregateInputType = {
   userId?: true
   serviceId?: true
   date?: true
-  status?: true
   createdAt?: true
   updatedAt?: true
+  status?: true
+  paymentStatus?: true
+  paymentAmount?: true
+  paymentExpiresAt?: true
+  mercadoPagoPreferenceId?: true
+  mercadoPagoPaymentId?: true
+  checkoutUrl?: true
+  pixQrCode?: true
+  pixQrCodeBase64?: true
   _all?: true
 }
 
@@ -129,6 +195,18 @@ export type BookingAggregateArgs<
   /**
    * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
    *
+   * Select which fields to average
+   **/
+  _avg?: BookingAvgAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   *
+   * Select which fields to sum
+   **/
+  _sum?: BookingSumAggregateInputType
+  /**
+   * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+   *
    * Select which fields to find the minimum value
    **/
   _min?: BookingMinAggregateInputType
@@ -161,6 +239,8 @@ export type BookingGroupByArgs<
   take?: number
   skip?: number
   _count?: BookingCountAggregateInputType | true
+  _avg?: BookingAvgAggregateInputType
+  _sum?: BookingSumAggregateInputType
   _min?: BookingMinAggregateInputType
   _max?: BookingMaxAggregateInputType
 }
@@ -170,10 +250,20 @@ export type BookingGroupByOutputType = {
   userId: string
   serviceId: string
   date: Date
-  status: $Enums.BookingStatus
   createdAt: Date
   updatedAt: Date
+  status: $Enums.BookingStatus
+  paymentStatus: $Enums.PaymentStatus
+  paymentAmount: runtime.Decimal
+  paymentExpiresAt: Date | null
+  mercadoPagoPreferenceId: string | null
+  mercadoPagoPaymentId: string | null
+  checkoutUrl: string | null
+  pixQrCode: string | null
+  pixQrCodeBase64: string | null
   _count: BookingCountAggregateOutputType | null
+  _avg: BookingAvgAggregateOutputType | null
+  _sum: BookingSumAggregateOutputType | null
   _min: BookingMinAggregateOutputType | null
   _max: BookingMaxAggregateOutputType | null
 }
@@ -199,14 +289,30 @@ export type BookingWhereInput = {
   userId?: Prisma.StringFilter<'Booking'> | string
   serviceId?: Prisma.StringFilter<'Booking'> | string
   date?: Prisma.DateTimeFilter<'Booking'> | Date | string
-  status?: Prisma.EnumBookingStatusFilter<'Booking'> | $Enums.BookingStatus
   createdAt?: Prisma.DateTimeFilter<'Booking'> | Date | string
   updatedAt?: Prisma.DateTimeFilter<'Booking'> | Date | string
-  user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+  status?: Prisma.EnumBookingStatusFilter<'Booking'> | $Enums.BookingStatus
+  paymentStatus?:
+    Prisma.EnumPaymentStatusFilter<'Booking'> | $Enums.PaymentStatus
+  paymentAmount?:
+    | Prisma.DecimalFilter<'Booking'>
+    | runtime.Decimal
+    | runtime.DecimalJsLike
+    | number
+    | string
+  paymentExpiresAt?:
+    Prisma.DateTimeNullableFilter<'Booking'> | Date | string | null
+  mercadoPagoPreferenceId?:
+    Prisma.StringNullableFilter<'Booking'> | string | null
+  mercadoPagoPaymentId?: Prisma.StringNullableFilter<'Booking'> | string | null
+  checkoutUrl?: Prisma.StringNullableFilter<'Booking'> | string | null
+  pixQrCode?: Prisma.StringNullableFilter<'Booking'> | string | null
+  pixQrCodeBase64?: Prisma.StringNullableFilter<'Booking'> | string | null
   service?: Prisma.XOR<
     Prisma.BarbershopServiceScalarRelationFilter,
     Prisma.BarbershopServiceWhereInput
   >
+  user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
   review?: Prisma.XOR<
     Prisma.ServiceReviewNullableScalarRelationFilter,
     Prisma.ServiceReviewWhereInput
@@ -218,37 +324,60 @@ export type BookingOrderByWithRelationInput = {
   userId?: Prisma.SortOrder
   serviceId?: Prisma.SortOrder
   date?: Prisma.SortOrder
-  status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
-  user?: Prisma.UserOrderByWithRelationInput
+  status?: Prisma.SortOrder
+  paymentStatus?: Prisma.SortOrder
+  paymentAmount?: Prisma.SortOrder
+  paymentExpiresAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  mercadoPagoPreferenceId?: Prisma.SortOrderInput | Prisma.SortOrder
+  mercadoPagoPaymentId?: Prisma.SortOrderInput | Prisma.SortOrder
+  checkoutUrl?: Prisma.SortOrderInput | Prisma.SortOrder
+  pixQrCode?: Prisma.SortOrderInput | Prisma.SortOrder
+  pixQrCodeBase64?: Prisma.SortOrderInput | Prisma.SortOrder
   service?: Prisma.BarbershopServiceOrderByWithRelationInput
+  user?: Prisma.UserOrderByWithRelationInput
   review?: Prisma.ServiceReviewOrderByWithRelationInput
 }
 
 export type BookingWhereUniqueInput = Prisma.AtLeast<
   {
     id?: string
+    mercadoPagoPreferenceId?: string
+    mercadoPagoPaymentId?: string
     AND?: Prisma.BookingWhereInput | Prisma.BookingWhereInput[]
     OR?: Prisma.BookingWhereInput[]
     NOT?: Prisma.BookingWhereInput | Prisma.BookingWhereInput[]
     userId?: Prisma.StringFilter<'Booking'> | string
     serviceId?: Prisma.StringFilter<'Booking'> | string
     date?: Prisma.DateTimeFilter<'Booking'> | Date | string
-    status?: Prisma.EnumBookingStatusFilter<'Booking'> | $Enums.BookingStatus
     createdAt?: Prisma.DateTimeFilter<'Booking'> | Date | string
     updatedAt?: Prisma.DateTimeFilter<'Booking'> | Date | string
-    user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
+    status?: Prisma.EnumBookingStatusFilter<'Booking'> | $Enums.BookingStatus
+    paymentStatus?:
+      Prisma.EnumPaymentStatusFilter<'Booking'> | $Enums.PaymentStatus
+    paymentAmount?:
+      | Prisma.DecimalFilter<'Booking'>
+      | runtime.Decimal
+      | runtime.DecimalJsLike
+      | number
+      | string
+    paymentExpiresAt?:
+      Prisma.DateTimeNullableFilter<'Booking'> | Date | string | null
+    checkoutUrl?: Prisma.StringNullableFilter<'Booking'> | string | null
+    pixQrCode?: Prisma.StringNullableFilter<'Booking'> | string | null
+    pixQrCodeBase64?: Prisma.StringNullableFilter<'Booking'> | string | null
     service?: Prisma.XOR<
       Prisma.BarbershopServiceScalarRelationFilter,
       Prisma.BarbershopServiceWhereInput
     >
+    user?: Prisma.XOR<Prisma.UserScalarRelationFilter, Prisma.UserWhereInput>
     review?: Prisma.XOR<
       Prisma.ServiceReviewNullableScalarRelationFilter,
       Prisma.ServiceReviewWhereInput
     > | null
   },
-  'id'
+  'id' | 'mercadoPagoPreferenceId' | 'mercadoPagoPaymentId'
 >
 
 export type BookingOrderByWithAggregationInput = {
@@ -256,12 +385,22 @@ export type BookingOrderByWithAggregationInput = {
   userId?: Prisma.SortOrder
   serviceId?: Prisma.SortOrder
   date?: Prisma.SortOrder
-  status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  status?: Prisma.SortOrder
+  paymentStatus?: Prisma.SortOrder
+  paymentAmount?: Prisma.SortOrder
+  paymentExpiresAt?: Prisma.SortOrderInput | Prisma.SortOrder
+  mercadoPagoPreferenceId?: Prisma.SortOrderInput | Prisma.SortOrder
+  mercadoPagoPaymentId?: Prisma.SortOrderInput | Prisma.SortOrder
+  checkoutUrl?: Prisma.SortOrderInput | Prisma.SortOrder
+  pixQrCode?: Prisma.SortOrderInput | Prisma.SortOrder
+  pixQrCodeBase64?: Prisma.SortOrderInput | Prisma.SortOrder
   _count?: Prisma.BookingCountOrderByAggregateInput
+  _avg?: Prisma.BookingAvgOrderByAggregateInput
   _max?: Prisma.BookingMaxOrderByAggregateInput
   _min?: Prisma.BookingMinOrderByAggregateInput
+  _sum?: Prisma.BookingSumOrderByAggregateInput
 }
 
 export type BookingScalarWhereWithAggregatesInput = {
@@ -276,21 +415,53 @@ export type BookingScalarWhereWithAggregatesInput = {
   userId?: Prisma.StringWithAggregatesFilter<'Booking'> | string
   serviceId?: Prisma.StringWithAggregatesFilter<'Booking'> | string
   date?: Prisma.DateTimeWithAggregatesFilter<'Booking'> | Date | string
+  createdAt?: Prisma.DateTimeWithAggregatesFilter<'Booking'> | Date | string
+  updatedAt?: Prisma.DateTimeWithAggregatesFilter<'Booking'> | Date | string
   status?:
     | Prisma.EnumBookingStatusWithAggregatesFilter<'Booking'>
     | $Enums.BookingStatus
-  createdAt?: Prisma.DateTimeWithAggregatesFilter<'Booking'> | Date | string
-  updatedAt?: Prisma.DateTimeWithAggregatesFilter<'Booking'> | Date | string
+  paymentStatus?:
+    | Prisma.EnumPaymentStatusWithAggregatesFilter<'Booking'>
+    | $Enums.PaymentStatus
+  paymentAmount?:
+    | Prisma.DecimalWithAggregatesFilter<'Booking'>
+    | runtime.Decimal
+    | runtime.DecimalJsLike
+    | number
+    | string
+  paymentExpiresAt?:
+    | Prisma.DateTimeNullableWithAggregatesFilter<'Booking'>
+    | Date
+    | string
+    | null
+  mercadoPagoPreferenceId?:
+    Prisma.StringNullableWithAggregatesFilter<'Booking'> | string | null
+  mercadoPagoPaymentId?:
+    Prisma.StringNullableWithAggregatesFilter<'Booking'> | string | null
+  checkoutUrl?:
+    Prisma.StringNullableWithAggregatesFilter<'Booking'> | string | null
+  pixQrCode?:
+    Prisma.StringNullableWithAggregatesFilter<'Booking'> | string | null
+  pixQrCodeBase64?:
+    Prisma.StringNullableWithAggregatesFilter<'Booking'> | string | null
 }
 
 export type BookingCreateInput = {
   id?: string
   date: Date | string
-  status?: $Enums.BookingStatus
   createdAt?: Date | string
   updatedAt?: Date | string
-  user: Prisma.UserCreateNestedOneWithoutBookingsInput
+  status?: $Enums.BookingStatus
+  paymentStatus?: $Enums.PaymentStatus
+  paymentAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  paymentExpiresAt?: Date | string | null
+  mercadoPagoPreferenceId?: string | null
+  mercadoPagoPaymentId?: string | null
+  checkoutUrl?: string | null
+  pixQrCode?: string | null
+  pixQrCodeBase64?: string | null
   service: Prisma.BarbershopServiceCreateNestedOneWithoutBookingsInput
+  user: Prisma.UserCreateNestedOneWithoutBookingsInput
   review?: Prisma.ServiceReviewCreateNestedOneWithoutBookingInput
 }
 
@@ -299,21 +470,47 @@ export type BookingUncheckedCreateInput = {
   userId: string
   serviceId: string
   date: Date | string
-  status?: $Enums.BookingStatus
   createdAt?: Date | string
   updatedAt?: Date | string
+  status?: $Enums.BookingStatus
+  paymentStatus?: $Enums.PaymentStatus
+  paymentAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  paymentExpiresAt?: Date | string | null
+  mercadoPagoPreferenceId?: string | null
+  mercadoPagoPaymentId?: string | null
+  checkoutUrl?: string | null
+  pixQrCode?: string | null
+  pixQrCodeBase64?: string | null
   review?: Prisma.ServiceReviewUncheckedCreateNestedOneWithoutBookingInput
 }
 
 export type BookingUpdateInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  status?:
-    Prisma.EnumBookingStatusFieldUpdateOperationsInput | $Enums.BookingStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  user?: Prisma.UserUpdateOneRequiredWithoutBookingsNestedInput
+  status?:
+    Prisma.EnumBookingStatusFieldUpdateOperationsInput | $Enums.BookingStatus
+  paymentStatus?:
+    Prisma.EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+  paymentAmount?:
+    | Prisma.DecimalFieldUpdateOperationsInput
+    | runtime.Decimal
+    | runtime.DecimalJsLike
+    | number
+    | string
+  paymentExpiresAt?:
+    Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  mercadoPagoPreferenceId?:
+    Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mercadoPagoPaymentId?:
+    Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  checkoutUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pixQrCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pixQrCodeBase64?:
+    Prisma.NullableStringFieldUpdateOperationsInput | string | null
   service?: Prisma.BarbershopServiceUpdateOneRequiredWithoutBookingsNestedInput
+  user?: Prisma.UserUpdateOneRequiredWithoutBookingsNestedInput
   review?: Prisma.ServiceReviewUpdateOneWithoutBookingNestedInput
 }
 
@@ -322,10 +519,28 @@ export type BookingUncheckedUpdateInput = {
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   serviceId?: Prisma.StringFieldUpdateOperationsInput | string
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  status?:
-    Prisma.EnumBookingStatusFieldUpdateOperationsInput | $Enums.BookingStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  status?:
+    Prisma.EnumBookingStatusFieldUpdateOperationsInput | $Enums.BookingStatus
+  paymentStatus?:
+    Prisma.EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+  paymentAmount?:
+    | Prisma.DecimalFieldUpdateOperationsInput
+    | runtime.Decimal
+    | runtime.DecimalJsLike
+    | number
+    | string
+  paymentExpiresAt?:
+    Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  mercadoPagoPreferenceId?:
+    Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mercadoPagoPaymentId?:
+    Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  checkoutUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pixQrCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pixQrCodeBase64?:
+    Prisma.NullableStringFieldUpdateOperationsInput | string | null
   review?: Prisma.ServiceReviewUncheckedUpdateOneWithoutBookingNestedInput
 }
 
@@ -334,18 +549,44 @@ export type BookingCreateManyInput = {
   userId: string
   serviceId: string
   date: Date | string
-  status?: $Enums.BookingStatus
   createdAt?: Date | string
   updatedAt?: Date | string
+  status?: $Enums.BookingStatus
+  paymentStatus?: $Enums.PaymentStatus
+  paymentAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  paymentExpiresAt?: Date | string | null
+  mercadoPagoPreferenceId?: string | null
+  mercadoPagoPaymentId?: string | null
+  checkoutUrl?: string | null
+  pixQrCode?: string | null
+  pixQrCodeBase64?: string | null
 }
 
 export type BookingUpdateManyMutationInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  status?:
-    Prisma.EnumBookingStatusFieldUpdateOperationsInput | $Enums.BookingStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  status?:
+    Prisma.EnumBookingStatusFieldUpdateOperationsInput | $Enums.BookingStatus
+  paymentStatus?:
+    Prisma.EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+  paymentAmount?:
+    | Prisma.DecimalFieldUpdateOperationsInput
+    | runtime.Decimal
+    | runtime.DecimalJsLike
+    | number
+    | string
+  paymentExpiresAt?:
+    Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  mercadoPagoPreferenceId?:
+    Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mercadoPagoPaymentId?:
+    Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  checkoutUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pixQrCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pixQrCodeBase64?:
+    Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type BookingUncheckedUpdateManyInput = {
@@ -353,10 +594,28 @@ export type BookingUncheckedUpdateManyInput = {
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   serviceId?: Prisma.StringFieldUpdateOperationsInput | string
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  status?:
-    Prisma.EnumBookingStatusFieldUpdateOperationsInput | $Enums.BookingStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  status?:
+    Prisma.EnumBookingStatusFieldUpdateOperationsInput | $Enums.BookingStatus
+  paymentStatus?:
+    Prisma.EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+  paymentAmount?:
+    | Prisma.DecimalFieldUpdateOperationsInput
+    | runtime.Decimal
+    | runtime.DecimalJsLike
+    | number
+    | string
+  paymentExpiresAt?:
+    Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  mercadoPagoPreferenceId?:
+    Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mercadoPagoPaymentId?:
+    Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  checkoutUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pixQrCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pixQrCodeBase64?:
+    Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type BookingListRelationFilter = {
@@ -374,9 +633,21 @@ export type BookingCountOrderByAggregateInput = {
   userId?: Prisma.SortOrder
   serviceId?: Prisma.SortOrder
   date?: Prisma.SortOrder
-  status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  status?: Prisma.SortOrder
+  paymentStatus?: Prisma.SortOrder
+  paymentAmount?: Prisma.SortOrder
+  paymentExpiresAt?: Prisma.SortOrder
+  mercadoPagoPreferenceId?: Prisma.SortOrder
+  mercadoPagoPaymentId?: Prisma.SortOrder
+  checkoutUrl?: Prisma.SortOrder
+  pixQrCode?: Prisma.SortOrder
+  pixQrCodeBase64?: Prisma.SortOrder
+}
+
+export type BookingAvgOrderByAggregateInput = {
+  paymentAmount?: Prisma.SortOrder
 }
 
 export type BookingMaxOrderByAggregateInput = {
@@ -384,9 +655,17 @@ export type BookingMaxOrderByAggregateInput = {
   userId?: Prisma.SortOrder
   serviceId?: Prisma.SortOrder
   date?: Prisma.SortOrder
-  status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  status?: Prisma.SortOrder
+  paymentStatus?: Prisma.SortOrder
+  paymentAmount?: Prisma.SortOrder
+  paymentExpiresAt?: Prisma.SortOrder
+  mercadoPagoPreferenceId?: Prisma.SortOrder
+  mercadoPagoPaymentId?: Prisma.SortOrder
+  checkoutUrl?: Prisma.SortOrder
+  pixQrCode?: Prisma.SortOrder
+  pixQrCodeBase64?: Prisma.SortOrder
 }
 
 export type BookingMinOrderByAggregateInput = {
@@ -394,9 +673,21 @@ export type BookingMinOrderByAggregateInput = {
   userId?: Prisma.SortOrder
   serviceId?: Prisma.SortOrder
   date?: Prisma.SortOrder
-  status?: Prisma.SortOrder
   createdAt?: Prisma.SortOrder
   updatedAt?: Prisma.SortOrder
+  status?: Prisma.SortOrder
+  paymentStatus?: Prisma.SortOrder
+  paymentAmount?: Prisma.SortOrder
+  paymentExpiresAt?: Prisma.SortOrder
+  mercadoPagoPreferenceId?: Prisma.SortOrder
+  mercadoPagoPaymentId?: Prisma.SortOrder
+  checkoutUrl?: Prisma.SortOrder
+  pixQrCode?: Prisma.SortOrder
+  pixQrCodeBase64?: Prisma.SortOrder
+}
+
+export type BookingSumOrderByAggregateInput = {
+  paymentAmount?: Prisma.SortOrder
 }
 
 export type BookingScalarRelationFilter = {
@@ -580,6 +871,10 @@ export type EnumBookingStatusFieldUpdateOperationsInput = {
   set?: $Enums.BookingStatus
 }
 
+export type EnumPaymentStatusFieldUpdateOperationsInput = {
+  set?: $Enums.PaymentStatus
+}
+
 export type BookingCreateNestedOneWithoutReviewInput = {
   create?: Prisma.XOR<
     Prisma.BookingCreateWithoutReviewInput,
@@ -609,9 +904,17 @@ export type BookingUpdateOneRequiredWithoutReviewNestedInput = {
 export type BookingCreateWithoutUserInput = {
   id?: string
   date: Date | string
-  status?: $Enums.BookingStatus
   createdAt?: Date | string
   updatedAt?: Date | string
+  status?: $Enums.BookingStatus
+  paymentStatus?: $Enums.PaymentStatus
+  paymentAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  paymentExpiresAt?: Date | string | null
+  mercadoPagoPreferenceId?: string | null
+  mercadoPagoPaymentId?: string | null
+  checkoutUrl?: string | null
+  pixQrCode?: string | null
+  pixQrCodeBase64?: string | null
   service: Prisma.BarbershopServiceCreateNestedOneWithoutBookingsInput
   review?: Prisma.ServiceReviewCreateNestedOneWithoutBookingInput
 }
@@ -620,9 +923,17 @@ export type BookingUncheckedCreateWithoutUserInput = {
   id?: string
   serviceId: string
   date: Date | string
-  status?: $Enums.BookingStatus
   createdAt?: Date | string
   updatedAt?: Date | string
+  status?: $Enums.BookingStatus
+  paymentStatus?: $Enums.PaymentStatus
+  paymentAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  paymentExpiresAt?: Date | string | null
+  mercadoPagoPreferenceId?: string | null
+  mercadoPagoPaymentId?: string | null
+  checkoutUrl?: string | null
+  pixQrCode?: string | null
+  pixQrCodeBase64?: string | null
   review?: Prisma.ServiceReviewUncheckedCreateNestedOneWithoutBookingInput
 }
 
@@ -675,17 +986,41 @@ export type BookingScalarWhereInput = {
   userId?: Prisma.StringFilter<'Booking'> | string
   serviceId?: Prisma.StringFilter<'Booking'> | string
   date?: Prisma.DateTimeFilter<'Booking'> | Date | string
-  status?: Prisma.EnumBookingStatusFilter<'Booking'> | $Enums.BookingStatus
   createdAt?: Prisma.DateTimeFilter<'Booking'> | Date | string
   updatedAt?: Prisma.DateTimeFilter<'Booking'> | Date | string
+  status?: Prisma.EnumBookingStatusFilter<'Booking'> | $Enums.BookingStatus
+  paymentStatus?:
+    Prisma.EnumPaymentStatusFilter<'Booking'> | $Enums.PaymentStatus
+  paymentAmount?:
+    | Prisma.DecimalFilter<'Booking'>
+    | runtime.Decimal
+    | runtime.DecimalJsLike
+    | number
+    | string
+  paymentExpiresAt?:
+    Prisma.DateTimeNullableFilter<'Booking'> | Date | string | null
+  mercadoPagoPreferenceId?:
+    Prisma.StringNullableFilter<'Booking'> | string | null
+  mercadoPagoPaymentId?: Prisma.StringNullableFilter<'Booking'> | string | null
+  checkoutUrl?: Prisma.StringNullableFilter<'Booking'> | string | null
+  pixQrCode?: Prisma.StringNullableFilter<'Booking'> | string | null
+  pixQrCodeBase64?: Prisma.StringNullableFilter<'Booking'> | string | null
 }
 
 export type BookingCreateWithoutServiceInput = {
   id?: string
   date: Date | string
-  status?: $Enums.BookingStatus
   createdAt?: Date | string
   updatedAt?: Date | string
+  status?: $Enums.BookingStatus
+  paymentStatus?: $Enums.PaymentStatus
+  paymentAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  paymentExpiresAt?: Date | string | null
+  mercadoPagoPreferenceId?: string | null
+  mercadoPagoPaymentId?: string | null
+  checkoutUrl?: string | null
+  pixQrCode?: string | null
+  pixQrCodeBase64?: string | null
   user: Prisma.UserCreateNestedOneWithoutBookingsInput
   review?: Prisma.ServiceReviewCreateNestedOneWithoutBookingInput
 }
@@ -694,9 +1029,17 @@ export type BookingUncheckedCreateWithoutServiceInput = {
   id?: string
   userId: string
   date: Date | string
-  status?: $Enums.BookingStatus
   createdAt?: Date | string
   updatedAt?: Date | string
+  status?: $Enums.BookingStatus
+  paymentStatus?: $Enums.PaymentStatus
+  paymentAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  paymentExpiresAt?: Date | string | null
+  mercadoPagoPreferenceId?: string | null
+  mercadoPagoPaymentId?: string | null
+  checkoutUrl?: string | null
+  pixQrCode?: string | null
+  pixQrCodeBase64?: string | null
   review?: Prisma.ServiceReviewUncheckedCreateNestedOneWithoutBookingInput
 }
 
@@ -746,11 +1089,19 @@ export type BookingUpdateManyWithWhereWithoutServiceInput = {
 export type BookingCreateWithoutReviewInput = {
   id?: string
   date: Date | string
-  status?: $Enums.BookingStatus
   createdAt?: Date | string
   updatedAt?: Date | string
-  user: Prisma.UserCreateNestedOneWithoutBookingsInput
+  status?: $Enums.BookingStatus
+  paymentStatus?: $Enums.PaymentStatus
+  paymentAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  paymentExpiresAt?: Date | string | null
+  mercadoPagoPreferenceId?: string | null
+  mercadoPagoPaymentId?: string | null
+  checkoutUrl?: string | null
+  pixQrCode?: string | null
+  pixQrCodeBase64?: string | null
   service: Prisma.BarbershopServiceCreateNestedOneWithoutBookingsInput
+  user: Prisma.UserCreateNestedOneWithoutBookingsInput
 }
 
 export type BookingUncheckedCreateWithoutReviewInput = {
@@ -758,9 +1109,17 @@ export type BookingUncheckedCreateWithoutReviewInput = {
   userId: string
   serviceId: string
   date: Date | string
-  status?: $Enums.BookingStatus
   createdAt?: Date | string
   updatedAt?: Date | string
+  status?: $Enums.BookingStatus
+  paymentStatus?: $Enums.PaymentStatus
+  paymentAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  paymentExpiresAt?: Date | string | null
+  mercadoPagoPreferenceId?: string | null
+  mercadoPagoPaymentId?: string | null
+  checkoutUrl?: string | null
+  pixQrCode?: string | null
+  pixQrCodeBase64?: string | null
 }
 
 export type BookingCreateOrConnectWithoutReviewInput = {
@@ -794,12 +1153,30 @@ export type BookingUpdateToOneWithWhereWithoutReviewInput = {
 export type BookingUpdateWithoutReviewInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  status?:
-    Prisma.EnumBookingStatusFieldUpdateOperationsInput | $Enums.BookingStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  user?: Prisma.UserUpdateOneRequiredWithoutBookingsNestedInput
+  status?:
+    Prisma.EnumBookingStatusFieldUpdateOperationsInput | $Enums.BookingStatus
+  paymentStatus?:
+    Prisma.EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+  paymentAmount?:
+    | Prisma.DecimalFieldUpdateOperationsInput
+    | runtime.Decimal
+    | runtime.DecimalJsLike
+    | number
+    | string
+  paymentExpiresAt?:
+    Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  mercadoPagoPreferenceId?:
+    Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mercadoPagoPaymentId?:
+    Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  checkoutUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pixQrCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pixQrCodeBase64?:
+    Prisma.NullableStringFieldUpdateOperationsInput | string | null
   service?: Prisma.BarbershopServiceUpdateOneRequiredWithoutBookingsNestedInput
+  user?: Prisma.UserUpdateOneRequiredWithoutBookingsNestedInput
 }
 
 export type BookingUncheckedUpdateWithoutReviewInput = {
@@ -807,28 +1184,72 @@ export type BookingUncheckedUpdateWithoutReviewInput = {
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   serviceId?: Prisma.StringFieldUpdateOperationsInput | string
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  status?:
-    Prisma.EnumBookingStatusFieldUpdateOperationsInput | $Enums.BookingStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  status?:
+    Prisma.EnumBookingStatusFieldUpdateOperationsInput | $Enums.BookingStatus
+  paymentStatus?:
+    Prisma.EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+  paymentAmount?:
+    | Prisma.DecimalFieldUpdateOperationsInput
+    | runtime.Decimal
+    | runtime.DecimalJsLike
+    | number
+    | string
+  paymentExpiresAt?:
+    Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  mercadoPagoPreferenceId?:
+    Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mercadoPagoPaymentId?:
+    Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  checkoutUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pixQrCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pixQrCodeBase64?:
+    Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type BookingCreateManyUserInput = {
   id?: string
   serviceId: string
   date: Date | string
-  status?: $Enums.BookingStatus
   createdAt?: Date | string
   updatedAt?: Date | string
+  status?: $Enums.BookingStatus
+  paymentStatus?: $Enums.PaymentStatus
+  paymentAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  paymentExpiresAt?: Date | string | null
+  mercadoPagoPreferenceId?: string | null
+  mercadoPagoPaymentId?: string | null
+  checkoutUrl?: string | null
+  pixQrCode?: string | null
+  pixQrCodeBase64?: string | null
 }
 
 export type BookingUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  status?:
-    Prisma.EnumBookingStatusFieldUpdateOperationsInput | $Enums.BookingStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  status?:
+    Prisma.EnumBookingStatusFieldUpdateOperationsInput | $Enums.BookingStatus
+  paymentStatus?:
+    Prisma.EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+  paymentAmount?:
+    | Prisma.DecimalFieldUpdateOperationsInput
+    | runtime.Decimal
+    | runtime.DecimalJsLike
+    | number
+    | string
+  paymentExpiresAt?:
+    Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  mercadoPagoPreferenceId?:
+    Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mercadoPagoPaymentId?:
+    Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  checkoutUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pixQrCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pixQrCodeBase64?:
+    Prisma.NullableStringFieldUpdateOperationsInput | string | null
   service?: Prisma.BarbershopServiceUpdateOneRequiredWithoutBookingsNestedInput
   review?: Prisma.ServiceReviewUpdateOneWithoutBookingNestedInput
 }
@@ -837,10 +1258,28 @@ export type BookingUncheckedUpdateWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   serviceId?: Prisma.StringFieldUpdateOperationsInput | string
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  status?:
-    Prisma.EnumBookingStatusFieldUpdateOperationsInput | $Enums.BookingStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  status?:
+    Prisma.EnumBookingStatusFieldUpdateOperationsInput | $Enums.BookingStatus
+  paymentStatus?:
+    Prisma.EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+  paymentAmount?:
+    | Prisma.DecimalFieldUpdateOperationsInput
+    | runtime.Decimal
+    | runtime.DecimalJsLike
+    | number
+    | string
+  paymentExpiresAt?:
+    Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  mercadoPagoPreferenceId?:
+    Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mercadoPagoPaymentId?:
+    Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  checkoutUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pixQrCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pixQrCodeBase64?:
+    Prisma.NullableStringFieldUpdateOperationsInput | string | null
   review?: Prisma.ServiceReviewUncheckedUpdateOneWithoutBookingNestedInput
 }
 
@@ -848,28 +1287,72 @@ export type BookingUncheckedUpdateManyWithoutUserInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   serviceId?: Prisma.StringFieldUpdateOperationsInput | string
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  status?:
-    Prisma.EnumBookingStatusFieldUpdateOperationsInput | $Enums.BookingStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  status?:
+    Prisma.EnumBookingStatusFieldUpdateOperationsInput | $Enums.BookingStatus
+  paymentStatus?:
+    Prisma.EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+  paymentAmount?:
+    | Prisma.DecimalFieldUpdateOperationsInput
+    | runtime.Decimal
+    | runtime.DecimalJsLike
+    | number
+    | string
+  paymentExpiresAt?:
+    Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  mercadoPagoPreferenceId?:
+    Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mercadoPagoPaymentId?:
+    Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  checkoutUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pixQrCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pixQrCodeBase64?:
+    Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type BookingCreateManyServiceInput = {
   id?: string
   userId: string
   date: Date | string
-  status?: $Enums.BookingStatus
   createdAt?: Date | string
   updatedAt?: Date | string
+  status?: $Enums.BookingStatus
+  paymentStatus?: $Enums.PaymentStatus
+  paymentAmount: runtime.Decimal | runtime.DecimalJsLike | number | string
+  paymentExpiresAt?: Date | string | null
+  mercadoPagoPreferenceId?: string | null
+  mercadoPagoPaymentId?: string | null
+  checkoutUrl?: string | null
+  pixQrCode?: string | null
+  pixQrCodeBase64?: string | null
 }
 
 export type BookingUpdateWithoutServiceInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  status?:
-    Prisma.EnumBookingStatusFieldUpdateOperationsInput | $Enums.BookingStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  status?:
+    Prisma.EnumBookingStatusFieldUpdateOperationsInput | $Enums.BookingStatus
+  paymentStatus?:
+    Prisma.EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+  paymentAmount?:
+    | Prisma.DecimalFieldUpdateOperationsInput
+    | runtime.Decimal
+    | runtime.DecimalJsLike
+    | number
+    | string
+  paymentExpiresAt?:
+    Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  mercadoPagoPreferenceId?:
+    Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mercadoPagoPaymentId?:
+    Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  checkoutUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pixQrCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pixQrCodeBase64?:
+    Prisma.NullableStringFieldUpdateOperationsInput | string | null
   user?: Prisma.UserUpdateOneRequiredWithoutBookingsNestedInput
   review?: Prisma.ServiceReviewUpdateOneWithoutBookingNestedInput
 }
@@ -878,10 +1361,28 @@ export type BookingUncheckedUpdateWithoutServiceInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  status?:
-    Prisma.EnumBookingStatusFieldUpdateOperationsInput | $Enums.BookingStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  status?:
+    Prisma.EnumBookingStatusFieldUpdateOperationsInput | $Enums.BookingStatus
+  paymentStatus?:
+    Prisma.EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+  paymentAmount?:
+    | Prisma.DecimalFieldUpdateOperationsInput
+    | runtime.Decimal
+    | runtime.DecimalJsLike
+    | number
+    | string
+  paymentExpiresAt?:
+    Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  mercadoPagoPreferenceId?:
+    Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mercadoPagoPaymentId?:
+    Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  checkoutUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pixQrCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pixQrCodeBase64?:
+    Prisma.NullableStringFieldUpdateOperationsInput | string | null
   review?: Prisma.ServiceReviewUncheckedUpdateOneWithoutBookingNestedInput
 }
 
@@ -889,10 +1390,28 @@ export type BookingUncheckedUpdateManyWithoutServiceInput = {
   id?: Prisma.StringFieldUpdateOperationsInput | string
   userId?: Prisma.StringFieldUpdateOperationsInput | string
   date?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
-  status?:
-    Prisma.EnumBookingStatusFieldUpdateOperationsInput | $Enums.BookingStatus
   createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  status?:
+    Prisma.EnumBookingStatusFieldUpdateOperationsInput | $Enums.BookingStatus
+  paymentStatus?:
+    Prisma.EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+  paymentAmount?:
+    | Prisma.DecimalFieldUpdateOperationsInput
+    | runtime.Decimal
+    | runtime.DecimalJsLike
+    | number
+    | string
+  paymentExpiresAt?:
+    Prisma.NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  mercadoPagoPreferenceId?:
+    Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  mercadoPagoPaymentId?:
+    Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  checkoutUrl?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pixQrCode?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  pixQrCodeBase64?:
+    Prisma.NullableStringFieldUpdateOperationsInput | string | null
 }
 
 export type BookingSelect<
@@ -904,11 +1423,19 @@ export type BookingSelect<
     userId?: boolean
     serviceId?: boolean
     date?: boolean
-    status?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+    status?: boolean
+    paymentStatus?: boolean
+    paymentAmount?: boolean
+    paymentExpiresAt?: boolean
+    mercadoPagoPreferenceId?: boolean
+    mercadoPagoPaymentId?: boolean
+    checkoutUrl?: boolean
+    pixQrCode?: boolean
+    pixQrCodeBase64?: boolean
     service?: boolean | Prisma.BarbershopServiceDefaultArgs<ExtArgs>
+    user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
     review?: boolean | Prisma.Booking$reviewArgs<ExtArgs>
   },
   ExtArgs['result']['booking']
@@ -923,11 +1450,19 @@ export type BookingSelectCreateManyAndReturn<
     userId?: boolean
     serviceId?: boolean
     date?: boolean
-    status?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+    status?: boolean
+    paymentStatus?: boolean
+    paymentAmount?: boolean
+    paymentExpiresAt?: boolean
+    mercadoPagoPreferenceId?: boolean
+    mercadoPagoPaymentId?: boolean
+    checkoutUrl?: boolean
+    pixQrCode?: boolean
+    pixQrCodeBase64?: boolean
     service?: boolean | Prisma.BarbershopServiceDefaultArgs<ExtArgs>
+    user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   },
   ExtArgs['result']['booking']
 >
@@ -941,11 +1476,19 @@ export type BookingSelectUpdateManyAndReturn<
     userId?: boolean
     serviceId?: boolean
     date?: boolean
-    status?: boolean
     createdAt?: boolean
     updatedAt?: boolean
-    user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
+    status?: boolean
+    paymentStatus?: boolean
+    paymentAmount?: boolean
+    paymentExpiresAt?: boolean
+    mercadoPagoPreferenceId?: boolean
+    mercadoPagoPaymentId?: boolean
+    checkoutUrl?: boolean
+    pixQrCode?: boolean
+    pixQrCodeBase64?: boolean
     service?: boolean | Prisma.BarbershopServiceDefaultArgs<ExtArgs>
+    user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   },
   ExtArgs['result']['booking']
 >
@@ -955,39 +1498,61 @@ export type BookingSelectScalar = {
   userId?: boolean
   serviceId?: boolean
   date?: boolean
-  status?: boolean
   createdAt?: boolean
   updatedAt?: boolean
+  status?: boolean
+  paymentStatus?: boolean
+  paymentAmount?: boolean
+  paymentExpiresAt?: boolean
+  mercadoPagoPreferenceId?: boolean
+  mercadoPagoPaymentId?: boolean
+  checkoutUrl?: boolean
+  pixQrCode?: boolean
+  pixQrCodeBase64?: boolean
 }
 
 export type BookingOmit<
   ExtArgs extends runtime.Types.Extensions.InternalArgs =
     runtime.Types.Extensions.DefaultArgs,
 > = runtime.Types.Extensions.GetOmit<
-  'id' | 'userId' | 'serviceId' | 'date' | 'status' | 'createdAt' | 'updatedAt',
+  | 'id'
+  | 'userId'
+  | 'serviceId'
+  | 'date'
+  | 'createdAt'
+  | 'updatedAt'
+  | 'status'
+  | 'paymentStatus'
+  | 'paymentAmount'
+  | 'paymentExpiresAt'
+  | 'mercadoPagoPreferenceId'
+  | 'mercadoPagoPaymentId'
+  | 'checkoutUrl'
+  | 'pixQrCode'
+  | 'pixQrCodeBase64',
   ExtArgs['result']['booking']
 >
 export type BookingInclude<
   ExtArgs extends runtime.Types.Extensions.InternalArgs =
     runtime.Types.Extensions.DefaultArgs,
 > = {
-  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   service?: boolean | Prisma.BarbershopServiceDefaultArgs<ExtArgs>
+  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   review?: boolean | Prisma.Booking$reviewArgs<ExtArgs>
 }
 export type BookingIncludeCreateManyAndReturn<
   ExtArgs extends runtime.Types.Extensions.InternalArgs =
     runtime.Types.Extensions.DefaultArgs,
 > = {
-  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   service?: boolean | Prisma.BarbershopServiceDefaultArgs<ExtArgs>
+  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }
 export type BookingIncludeUpdateManyAndReturn<
   ExtArgs extends runtime.Types.Extensions.InternalArgs =
     runtime.Types.Extensions.DefaultArgs,
 > = {
-  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
   service?: boolean | Prisma.BarbershopServiceDefaultArgs<ExtArgs>
+  user?: boolean | Prisma.UserDefaultArgs<ExtArgs>
 }
 
 export type $BookingPayload<
@@ -996,8 +1561,8 @@ export type $BookingPayload<
 > = {
   name: 'Booking'
   objects: {
-    user: Prisma.$UserPayload<ExtArgs>
     service: Prisma.$BarbershopServicePayload<ExtArgs>
+    user: Prisma.$UserPayload<ExtArgs>
     review: Prisma.$ServiceReviewPayload<ExtArgs> | null
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<
@@ -1006,9 +1571,17 @@ export type $BookingPayload<
       userId: string
       serviceId: string
       date: Date
-      status: $Enums.BookingStatus
       createdAt: Date
       updatedAt: Date
+      status: $Enums.BookingStatus
+      paymentStatus: $Enums.PaymentStatus
+      paymentAmount: runtime.Decimal
+      paymentExpiresAt: Date | null
+      mercadoPagoPreferenceId: string | null
+      mercadoPagoPaymentId: string | null
+      checkoutUrl: string | null
+      pixQrCode: string | null
+      pixQrCodeBase64: string | null
     },
     ExtArgs['result']['booking']
   >
@@ -1559,11 +2132,11 @@ export interface Prisma__BookingClient<
   GlobalOmitOptions = {},
 > extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: 'PrismaPromise'
-  user<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(
-    args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>
-  ): Prisma.Prisma__UserClient<
+  service<T extends Prisma.BarbershopServiceDefaultArgs<ExtArgs> = {}>(
+    args?: Prisma.Subset<T, Prisma.BarbershopServiceDefaultArgs<ExtArgs>>
+  ): Prisma.Prisma__BarbershopServiceClient<
     | runtime.Types.Result.GetResult<
-        Prisma.$UserPayload<ExtArgs>,
+        Prisma.$BarbershopServicePayload<ExtArgs>,
         T,
         'findUniqueOrThrow',
         GlobalOmitOptions
@@ -1573,11 +2146,11 @@ export interface Prisma__BookingClient<
     ExtArgs,
     GlobalOmitOptions
   >
-  service<T extends Prisma.BarbershopServiceDefaultArgs<ExtArgs> = {}>(
-    args?: Prisma.Subset<T, Prisma.BarbershopServiceDefaultArgs<ExtArgs>>
-  ): Prisma.Prisma__BarbershopServiceClient<
+  user<T extends Prisma.UserDefaultArgs<ExtArgs> = {}>(
+    args?: Prisma.Subset<T, Prisma.UserDefaultArgs<ExtArgs>>
+  ): Prisma.Prisma__UserClient<
     | runtime.Types.Result.GetResult<
-        Prisma.$BarbershopServicePayload<ExtArgs>,
+        Prisma.$UserPayload<ExtArgs>,
         T,
         'findUniqueOrThrow',
         GlobalOmitOptions
@@ -1640,9 +2213,17 @@ export interface BookingFieldRefs {
   readonly userId: Prisma.FieldRef<'Booking', 'String'>
   readonly serviceId: Prisma.FieldRef<'Booking', 'String'>
   readonly date: Prisma.FieldRef<'Booking', 'DateTime'>
-  readonly status: Prisma.FieldRef<'Booking', 'BookingStatus'>
   readonly createdAt: Prisma.FieldRef<'Booking', 'DateTime'>
   readonly updatedAt: Prisma.FieldRef<'Booking', 'DateTime'>
+  readonly status: Prisma.FieldRef<'Booking', 'BookingStatus'>
+  readonly paymentStatus: Prisma.FieldRef<'Booking', 'PaymentStatus'>
+  readonly paymentAmount: Prisma.FieldRef<'Booking', 'Decimal'>
+  readonly paymentExpiresAt: Prisma.FieldRef<'Booking', 'DateTime'>
+  readonly mercadoPagoPreferenceId: Prisma.FieldRef<'Booking', 'String'>
+  readonly mercadoPagoPaymentId: Prisma.FieldRef<'Booking', 'String'>
+  readonly checkoutUrl: Prisma.FieldRef<'Booking', 'String'>
+  readonly pixQrCode: Prisma.FieldRef<'Booking', 'String'>
+  readonly pixQrCodeBase64: Prisma.FieldRef<'Booking', 'String'>
 }
 
 // Custom InputTypes

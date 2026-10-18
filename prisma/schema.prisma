@@ -1,8 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Get a free hosted Postgres database in seconds: `npx create-db`
-
 generator client {
   provider = "prisma-client"
   output   = "../app/_generated/prisma"
@@ -12,31 +7,18 @@ datasource db {
   provider = "postgresql"
 }
 
-enum Role {
-  USER
-  ADMIN
-}
-
-enum BookingStatus {
-  pending
-  finalized
-  confirmed
-  cancel
-}
-
 model User {
   id            String    @id @default(cuid())
-  name          String?
   email         String    @unique
+  name          String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
   emailVerified DateTime?
   image         String?
   role          Role      @default(USER)
-  bookings      Booking[]
   accounts      Account[]
+  bookings      Booking[]
   sessions      Session[]
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
 }
 
 model Account {
@@ -51,11 +33,9 @@ model Account {
   scope             String?
   id_token          String?
   session_state     String?
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@id([provider, providerAccountId])
 }
@@ -64,10 +44,9 @@ model Session {
   sessionToken String   @unique
   userId       String
   expires      DateTime
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
 }
 
 model VerificationToken {
@@ -110,16 +89,24 @@ model WeeklyAvailability {
 }
 
 model Booking {
-  id        String            @id @default(uuid())
-  userId    String
-  user      User              @relation(fields: [userId], references: [id])
-  serviceId String
-  service   BarbershopService @relation(fields: [serviceId], references: [id])
-  date      DateTime
-  status    BookingStatus     @default(pending)
-  createdAt DateTime          @default(now())
-  updatedAt DateTime          @updatedAt
-  review    ServiceReview?
+  id                      String            @id @default(uuid())
+  userId                  String
+  serviceId               String
+  date                    DateTime
+  createdAt               DateTime          @default(now())
+  updatedAt               DateTime          @updatedAt
+  status                  BookingStatus     @default(pending)
+  paymentStatus           PaymentStatus     @default(pending)
+  paymentAmount           Decimal           @db.Decimal(10, 2)
+  paymentExpiresAt        DateTime?
+  mercadoPagoPreferenceId String?           @unique
+  mercadoPagoPaymentId    String?           @unique
+  checkoutUrl             String?
+  pixQrCode               String?
+  pixQrCodeBase64         String?
+  service                 BarbershopService @relation(fields: [serviceId], references: [id])
+  user                    User              @relation(fields: [userId], references: [id])
+  review                  ServiceReview?
 }
 
 model ServiceReview {
@@ -129,4 +116,24 @@ model ServiceReview {
   updatedAt DateTime @updatedAt
   bookingId String   @unique
   booking   Booking  @relation(fields: [bookingId], references: [id])
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+enum BookingStatus {
+  pending
+  finalized
+  confirmed
+  cancel
+}
+
+enum PaymentStatus {
+  pending
+  approved
+  rejected
+  expired
+  refunded
 }
