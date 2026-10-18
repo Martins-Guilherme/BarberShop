@@ -1,3 +1,5 @@
+'use server'
+
 import { db } from '../_lib/prisma'
 
 export type WeeklyAvailabilityEntry = {

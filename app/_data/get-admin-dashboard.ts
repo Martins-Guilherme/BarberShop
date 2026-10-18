@@ -1,12 +1,12 @@
 'use server'
 
-import { addDays, endOfDay, startOfDay } from 'date-fns'
 import { getServerSession } from 'next-auth'
 import { redirect } from 'next/navigation'
 
 import { authOptions } from '../_lib/auth'
 import { db } from '../_lib/prisma'
 import { finalizeExpiredBookings } from './finalize-expired-bookings'
+import { getPendingBookingsForPreview } from './get-pending-bookings-preview'
 
 export const getAdminDashboard = async () => {
   const session = await getServerSession(authOptions)
@@ -17,27 +17,7 @@ export const getAdminDashboard = async () => {
 
   await finalizeExpiredBookings()
 
-  const today = startOfDay(new Date())
-  const pendingBookingsForWeek = await db.booking.findMany({
-    where: {
-      status: 'pending',
-      date: {
-        gte: today,
-        lte: endOfDay(addDays(today, 7)),
-      },
-    },
-    orderBy: { date: 'asc' },
-    include: {
-      user: { select: { name: true } },
-      service: {
-        select: {
-          name: true,
-          price: true,
-          barbershop: { select: { name: true } },
-        },
-      },
-    },
-  })
+  const pendingBookingsForWeek = await getPendingBookingsForPreview()
 
   const [
     totalBookings,
@@ -91,12 +71,6 @@ export const getAdminDashboard = async () => {
     completedBookings,
     averageRating: Number(averageRating._avg.rating ?? 0),
     recentBookings,
-    pendingBookingsForWeek: pendingBookingsForWeek.map((booking) => ({
-      ...booking,
-      service: {
-        ...booking.service,
-        price: Number(booking.service.price),
-      },
-    })),
+    pendingBookingsForWeek,
   }
 }

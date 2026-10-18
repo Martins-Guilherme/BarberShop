@@ -2,10 +2,12 @@
 
 import { addDays, format, isSameDay, startOfToday } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { toast } from 'sonner'
 
 import { confirmPendingBooking } from '../_actions/confirm-pending-booking'
+import { refreshPendingBookingsPreview } from '../_actions/get-pending-bookings-preview'
+import type { PendingBookingPreviewItem } from '../_types/pending-booking-preview'
 import BookingSummary from './booking-summary'
 import { Button } from './ui/button'
 import { Calendar } from './ui/calendar'
@@ -18,17 +20,6 @@ import {
   DialogTrigger,
 } from './ui/dialog'
 
-interface PendingBookingPreviewItem {
-  id: string
-  date: Date
-  user: { name: string | null }
-  service: {
-    name: string
-    price: number
-    barbershop: { name: string }
-  }
-}
-
 interface PendingBookingsPreviewProps {
   bookings: PendingBookingPreviewItem[]
 }
@@ -37,19 +28,73 @@ export function PendingBookingsPreview({
   bookings,
 }: PendingBookingsPreviewProps) {
   const today = startOfToday()
+  const [isOpen, setIsOpen] = useState(false)
+  const [currentBookings, setCurrentBookings] = useState(bookings)
+  const [refreshError, setRefreshError] = useState<string | null>(null)
   const [selectedDate, setSelectedDate] = useState<Date>(today)
   const [confirmingBookingId, setConfirmingBookingId] = useState<string | null>(
     null
   )
-  const selectedBookings = bookings.filter((booking) =>
+  const selectedBookings = currentBookings.filter((booking) =>
     isSameDay(booking.date, selectedDate)
   )
-  const bookedDates = bookings.map((booking) => booking.date)
+  const bookedDates = currentBookings.map((booking) => booking.date)
+
+  useEffect(() => {
+    if (!isOpen) return
+
+    let isActive = true
+    let isRefreshing = false
+
+    const refreshBookings = async () => {
+      if (isRefreshing || document.visibilityState !== 'visible') return
+      isRefreshing = true
+
+      try {
+        const updatedBookings = await refreshPendingBookingsPreview()
+        if (isActive) {
+          setCurrentBookings(updatedBookings)
+          setRefreshError(null)
+        }
+      } catch (error) {
+        console.error('Falha ao atualizar as reservas pendentes:', error)
+        if (isActive) {
+          setRefreshError(
+            'Não foi possível atualizar as reservas. Tentaremos novamente.'
+          )
+        }
+      } finally {
+        isRefreshing = false
+      }
+    }
+
+    const intervalId = window.setInterval(() => {
+      void refreshBookings()
+    }, 30_000)
+
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === 'visible') {
+        void refreshBookings()
+      }
+    }
+
+    document.addEventListener('visibilitychange', handleVisibilityChange)
+    void refreshBookings()
+
+    return () => {
+      isActive = false
+      window.clearInterval(intervalId)
+      document.removeEventListener('visibilitychange', handleVisibilityChange)
+    }
+  }, [isOpen])
 
   const handleConfirm = (bookingId: string) => {
     setConfirmingBookingId(bookingId)
     void confirmPendingBooking(bookingId)
       .then(() => {
+        setCurrentBookings((current) =>
+          current.filter((booking) => booking.id !== bookingId)
+        )
         toast.success('Agendamento confirmado.')
       })
       .catch((error: unknown) => {
@@ -63,7 +108,7 @@ export function PendingBookingsPreview({
   }
 
   return (
-    <Dialog>
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger
         render={
           <Button variant="default" size="lg">
@@ -79,6 +124,12 @@ export function PendingBookingsPreview({
             confirme as reservas.
           </DialogDescription>
         </DialogHeader>
+
+        {refreshError && (
+          <p role="status" className="text-destructive text-sm">
+            {refreshError}
+          </p>
+        )}
 
         <div className="no-scrollbar -mx-4 grid max-h-[50vh] justify-center gap-5 overflow-y-auto md:grid-cols-[auto_1fr]">
           <Calendar
