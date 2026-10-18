@@ -89,8 +89,17 @@ assinatura configurado para as notificações, não o Access Token.
 
 Para testes, crie também uma conta compradora de teste no painel de
 desenvolvedores e coloque o e-mail dessa conta em
-`MERCADO_PAGO_TEST_PAYER_EMAIL`. Esse valor é usado somente fora de produção;
-em produção, o pagador é o e-mail da sessão autenticada.
+`MERCADO_PAGO_TEST_PAYER_EMAIL`. Quando o Access Token começa com `TEST-`, esse
+e-mail é usado mesmo que o app
+esteja publicado na Vercel. Com credenciais de produção, o pagador é o e-mail
+da sessão autenticada.
+
+Na Vercel, adicione cada variável em **Settings → Environment Variables** como
+nome e valor separados, sem aspas ao redor dos valores. Defina-as para o
+ambiente do deployment (Production ou Preview) e faça um novo deployment após
+alterá-las. Por exemplo, `APP_URL` deve ter somente a origem
+`https://seu-dominio.vercel.app`, sem caminho, aspas ou barra final; o endpoint
+de notificação é acrescentado pelo servidor.
 
 No painel do Mercado Pago, configure a URL de notificações como
 `{APP_URL}/api/mercadopago/webhook` e use o segredo correspondente em

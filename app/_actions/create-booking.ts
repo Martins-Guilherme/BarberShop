@@ -19,16 +19,19 @@ export const createBooking = async (params: CreateBookingParams) => {
   if (!session?.user?.id) {
     throw new Error('Usuario não autenticado!')
   }
-  if (!session.user.email) {
+  const accessToken = process.env.MERCADO_PAGO_ACCESS_TOKEN
+  const isTestAccessToken = accessToken?.startsWith('TEST-') ?? false
+  const payerEmail = isTestAccessToken
+    ? process.env.MERCADO_PAGO_TEST_PAYER_EMAIL
+    : session.user.email
+
+  if (!payerEmail) {
     throw new Error(
-      'Sua conta precisa ter um e-mail para gerar o pagamento Pix.'
+      isTestAccessToken
+        ? 'Configure MERCADO_PAGO_TEST_PAYER_EMAIL com o e-mail da conta compradora de teste.'
+        : 'Sua conta precisa ter um e-mail para gerar o pagamento Pix.'
     )
   }
-  const payerEmail =
-    process.env.NODE_ENV !== 'production' &&
-    process.env.MERCADO_PAGO_TEST_PAYER_EMAIL
-      ? process.env.MERCADO_PAGO_TEST_PAYER_EMAIL
-      : session.user.email
 
   if (!isValid(params.date) || params.date <= new Date()) {
     throw new Error('Selecione uma data e horário futuros.')
