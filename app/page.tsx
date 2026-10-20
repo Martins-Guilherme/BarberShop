@@ -4,7 +4,7 @@ import { db } from './_lib/prisma'
 
 import BarbershopItem from './_components/barbershop-item'
 import Header from './_components/header'
-import { Button } from './_components/ui/button'
+import { buttonVariants } from './_components/ui/button'
 import { quickSearchOptinons } from './_constants/search'
 import BookingItem from './_components/booking-item'
 import Search from './_components/search'
@@ -55,11 +55,13 @@ export default async function Home() {
         {/* Busca rápida */}
         <div className="mt-6 flex gap-3 overflow-x-scroll [&::-webkit-scrollbar]:hidden">
           {quickSearchOptinons.map((option) => (
-            <Button
-              className="gap-2"
-              variant="secondary"
+            <Link
               key={option.title}
-              render={<Link href={`/barbershops?service=${option.title}`} />}
+              href={`/barbershops?service=${option.title}`}
+              className={buttonVariants({
+                className: 'gap-2',
+                variant: 'secondary',
+              })}
             >
               <Image
                 className="gap-2"
@@ -69,7 +71,7 @@ export default async function Home() {
                 alt={option.title}
               />
               {option.title}
-            </Button>
+            </Link>
           ))}
         </div>
         {/* Banner */}

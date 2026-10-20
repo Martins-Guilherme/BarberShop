@@ -11,7 +11,7 @@ import {
 } from 'lucide-react'
 
 import { SheetClose, SheetContent, SheetHeader, SheetTitle } from './ui/sheet'
-import { Button } from './ui/button'
+import { Button, buttonVariants } from './ui/button'
 import Image from 'next/image'
 import { Dialog, DialogContent, DialogTrigger } from './ui/dialog'
 import { signOut, useSession } from 'next-auth/react'
@@ -59,72 +59,62 @@ const SideBarSheet = () => {
 
       <div className="flex flex-col justify-start gap-1 border-b border-solid py-5">
         <SheetClose
-          render={
-            <Button
-              variant="ghost"
-              className="justify-start gap-2"
-              render={<Link href="/" />}
-            >
-              <HomeIcon size={18} />
-              Início
-            </Button>
-          }
-        ></SheetClose>
+          nativeButton={false}
+          className={buttonVariants({
+            variant: 'ghost',
+            className: 'justify-start gap-2',
+          })}
+          render={<Link href="/" />}
+        >
+          <HomeIcon size={18} />
+          Início
+        </SheetClose>
         {data?.user && data?.user?.role != 'ADMIN' ? (
-          <Button
-            className="justify-start gap-2"
-            variant="ghost"
-            render={<Link href="/bookings" />}
+          <Link
+            href="/bookings"
+            className={buttonVariants({
+              variant: 'ghost',
+              className: 'justify-start gap-2',
+            })}
           >
             <CalendarIcon size={18} />
             Agendamentos
-          </Button>
-        ) : (
-          []
-        )}
+          </Link>
+        ) : null}
         {data?.user?.role == 'ADMIN' ? (
-          <>
-            <SheetClose
-              render={
-                <Button
-                  className="justify-start gap-2"
-                  variant="ghost"
-                  render={<Link href="/admin" />}
-                >
-                  <BadgeDollarSignIcon size={18} />
-                  Dashboard
-                </Button>
-              }
-            />
-          </>
-        ) : (
-          []
-        )}
+          <SheetClose
+            nativeButton={false}
+            className={buttonVariants({
+              variant: 'ghost',
+              className: 'justify-start gap-2',
+            })}
+            render={<Link href="/admin" />}
+          >
+            <BadgeDollarSignIcon size={18} />
+            Dashboard
+          </SheetClose>
+        ) : null}
       </div>
 
       <div className="flex flex-col gap-1 border-b border-solid py-5">
         {quickSearchOptinons.map((option) => (
           <SheetClose
+            nativeButton={false}
             key={option.title}
-            render={
-              <Button
-                className="justify-start gap-2"
-                key={option.title}
-                variant="ghost"
-                render={
-                  <Link href={`/barbershops?service=${option.title}`}>
-                    <Image
-                      src={option.imageURL}
-                      height={18}
-                      width={18}
-                      alt={option.title}
-                    />
-                    {option.title}
-                  </Link>
-                }
-              ></Button>
-            }
-          ></SheetClose>
+            className={buttonVariants({
+              variant: 'ghost',
+              className: 'justify-start gap-2',
+            })}
+            render={<Link href={`/barbershops?service=${option.title}`} />}
+          >
+            <Image
+              src={option.imageURL}
+              height={18}
+              width={18}
+              alt={option.title}
+            />
+            {option.title}
+          </SheetClose>
         ))}
       </div>
       {data?.user && (

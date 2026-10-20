@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "next dev",
     "local": "next -H 0.0.0.0",
+    "preview": "(cd \"$HOME/Docker/postgress-barbershop\" && docker compose up -d) && pnpm prisma migrate dev",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",

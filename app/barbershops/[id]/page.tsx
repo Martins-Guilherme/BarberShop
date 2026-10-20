@@ -1,7 +1,7 @@
 import PhoneItem from '@/app/_components/phone-item'
 import ServiceItem from '@/app/_components/service-item'
 import SideBarSheet from '@/app/_components/sidebar-sheet'
-import { Button } from '@/app/_components/ui/button'
+import { Button, buttonVariants } from '@/app/_components/ui/button'
 import { SheetTrigger, Sheet } from '@/app/_components/ui/sheet'
 import { getUniqueBarberShop } from '@/app/_data/get-unique-barbershop'
 
@@ -35,14 +35,17 @@ const BarbershopPage = async ({ params }: BarberShopPageProps) => {
             className="object-cover"
           />
         )}
-        <Button
-          render={<Link href={'/'} />}
-          size="icon"
-          variant="outline"
-          className="absolute top-4 left-4"
+        <Link
+          href="/"
+          aria-label="Voltar ao inicio"
+          className={buttonVariants({
+            size: 'icon',
+            variant: 'outline',
+            className: 'absolute top-4 left-4',
+          })}
         >
           <ChevronLeftIcon />
-        </Button>
+        </Link>
 
         <Sheet>
           <SheetTrigger
@@ -95,8 +98,8 @@ const BarbershopPage = async ({ params }: BarberShopPageProps) => {
       </div>
       {/* CONTATO */}
       <div className="space-y-6 p-5">
-        {barbershop.phones.map((phone) => (
-          <PhoneItem key={phone} phone={phone} />
+        {barbershop.phones.map((phone, index) => (
+          <PhoneItem key={index} phone={phone} />
         ))}
       </div>
     </div>

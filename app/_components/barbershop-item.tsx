@@ -3,7 +3,7 @@
 import { Barbershop } from '@/app/_generated/prisma/client'
 import { Card, CardContent } from './ui/card'
 import Image from 'next/image'
-import { Button } from './ui/button'
+import { buttonVariants } from './ui/button'
 import { Badge } from './ui/badge'
 import { StarIcon } from 'lucide-react'
 import Link from 'next/link'
@@ -38,13 +38,15 @@ const BarbershopItem = ({ barbershop }: BarbershopItemProps) => {
         <div className="px-1 py-2">
           <h3 className="truncate font-semibold">{barbershop.name}</h3>
           <p className="truncate text-sm text-gray-400">{barbershop.adress}</p>
-          <Button
-            variant="secondary"
-            className="mt-3 w-full"
-            render={<Link href={`/barbershops/${barbershop.id}`} />}
+          <Link
+            href={`/barbershops/${barbershop.id}`}
+            className={buttonVariants({
+              variant: 'secondary',
+              className: 'mt-3 w-full',
+            })}
           >
             Reservar
-          </Button>
+          </Link>
         </div>
       </CardContent>
     </Card>
